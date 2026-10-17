@@ -1,0 +1,11 @@
+<footer class="tv-foot">
+  <nav class="tv-foot__links">
+    <a href="{:mac_url('gbook/index')}">留言反馈</a>
+    <a href="{:mac_url('label/rank')}">排行榜</a>
+    <a href="{:mac_url('map/index')}">最近更新</a>
+    <a href="{:mac_url('rss/index')}" target="_blank" rel="noopener">RSS</a>
+  </nav>
+  <p class="tv-foot__copy">© {:date('Y')} {$maccms.site_name}{if condition="$maccms.site_icp neq '' and $maccms.site_icp neq 'icp123'"} · <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener nofollow">{$maccms.site_icp}</a>{/if}</p>
+  <p class="tv-foot__tip">本站所有内容均来自互联网，如有侵权请通过留言反馈联系删除。</p>
+</footer>
+{if condition="$maccms.site_tj neq '' and $maccms.site_tj neq '统计代码'"}<div class="tv-tj" hidden>{$maccms.site_tj}</div>{/if}

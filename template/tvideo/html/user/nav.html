@@ -1,0 +1,7 @@
+<nav class="tv-uc-nav tv-scroll-x" aria-label="个人中心导航">
+  <a class="{if condition="$maccms.controller_action eq 'user/index'"}is-active{/if}" href="{:mac_url('user/index')}">个人中心</a>
+  <a class="{if condition="$maccms.controller_action eq 'user/plays'"}is-active{/if}" href="{:mac_url('user/plays')}">播放记录</a>
+  <a class="{if condition="$maccms.controller_action eq 'user/favs'"}is-active{/if}" href="{:mac_url('user/favs')}">我的收藏</a>
+  <a class="{if condition="$maccms.controller_action eq 'user/downs'"}is-active{/if}" href="{:mac_url('user/downs')}">下载记录</a>
+  <a class="{if condition="$maccms.controller_action eq 'user/info'"}is-active{/if}" href="{:mac_url('user/info')}">资料设置</a>
+</nav>

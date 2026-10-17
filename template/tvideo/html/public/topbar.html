@@ -1,0 +1,34 @@
+<header class="tv-top" data-tv-top>
+  <a class="tv-top__logo" href="{$maccms.path}" title="{$maccms.site_name}"><svg class="tv-logo__mark"><use href="#i-logo"/></svg><span class="tv-logo__text">{$tv_brand}</span></a>
+  <form class="tv-search" action="{:mac_url('vod/search')}" method="get" role="search" data-tv-search data-hot="{:implode(',', $tv_hot)}">
+    <svg class="tv-ico tv-search__ico"><use href="#i-search"/></svg>
+    <input class="tv-search__input" type="search" name="wd" autocomplete="off" maxlength="40" enterkeyhint="search" aria-label="搜索影片" placeholder="{$tv_hot.0|default='搜索影片、演员、导演'}" value="{$param.wd|default=''}">
+    <button class="tv-search__btn" type="submit">搜索</button>
+    <div class="tv-suggest" data-tv-suggest hidden></div>
+  </form>
+  <div class="tv-top__acts">
+    <div class="tv-act" data-tv-dropdown>
+      <button class="tv-act__btn" type="button" aria-label="观看历史" aria-haspopup="true"><svg class="tv-ico"><use href="#i-history"/></svg><span>历史</span></button>
+      <div class="tv-menu tv-menu--history" data-tv-history-list><p class="tv-menu__empty">暂无观看记录</p></div>
+    </div>
+    {if condition="$tv_login"}
+    <div class="tv-act" data-tv-dropdown>
+      <a class="tv-act__btn tv-act__avatar{if condition="!empty($user['vip_nav'])"} is-vip{/if}" href="{:mac_url('user/index')}" aria-label="个人中心"><img src="{:mac_get_user_portrait($user['user_id'])}" alt="" width="34" height="34"></a>
+      <div class="tv-menu tv-menu--user">
+        <div class="tv-menu__head">
+          <img src="{:mac_get_user_portrait($user['user_id'])}" alt="" width="44" height="44">
+          <div><strong>{:mac_default($user['user_nick_name'], $user['user_name'])}</strong><em{if condition="!empty($user['vip_nav'])"} class="is-vip"{/if}>{$user.group.group_name|default='会员'}</em></div>
+        </div>
+        <a href="{:mac_url('user/index')}"><svg class="tv-ico"><use href="#i-user"/></svg>个人中心</a>
+        <a href="{:mac_url('user/plays')}"><svg class="tv-ico"><use href="#i-history"/></svg>播放记录</a>
+        <a href="{:mac_url('user/favs')}"><svg class="tv-ico"><use href="#i-heart"/></svg>我的收藏</a>
+        <a href="javascript:;" data-tv-logout><svg class="tv-ico"><use href="#i-logout"/></svg>退出登录</a>
+      </div>
+    </div>
+    {else/}
+    <div class="tv-act">
+      <a class="tv-act__btn" href="{:mac_url('user/login')}" data-tv-login><svg class="tv-ico"><use href="#i-user"/></svg><span>登录</span></a>
+    </div>
+    {/if}
+  </div>
+</header>

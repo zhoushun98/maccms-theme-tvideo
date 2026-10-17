@@ -1,0 +1,15 @@
+{extend name="public/base" /}
+{block name="title"}最近更新 · 网站地图 - {$maccms.site_name}{/block}
+{block name="main"}
+<header class="tv-page-hd"><h1>最近更新</h1><p>按频道浏览最新上架的影片</p></header>
+{volist name="tv_nav_types" id="mt"}
+<section class="tv-sec">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">{$mt.type_name}</h2><a class="tv-sec__more" href="{:mac_url_type($mt)}">进入频道<svg class="tv-ico"><use href="#i-right"/></svg></a></header>
+  <ul class="tv-map">
+    {maccms:vod num="30" type="'.$mt['type_id'].'" order="desc" by="time" id="vo" key="mk"}
+    <li><a href="{:mac_url_vod_detail($vo)}">{$vo.vod_name}</a><span>{$vo.vod_remarks}</span><time>{:date('m-d', (int)$vo['vod_time'])}</time></li>
+    {/maccms:vod}
+  </ul>
+</section>
+{/volist}
+{/block}

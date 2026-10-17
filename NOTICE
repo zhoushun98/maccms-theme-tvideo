@@ -1,0 +1,12 @@
+TVideo · maccms10 深色视频主题
+Copyright 2026 zhoushun98
+
+本项目依据 Apache License 2.0 发布，许可证全文见 LICENSE。
+
+本项目包含来自以下项目的文件：
+
+maccms10（苹果CMS）
+https://github.com/magicblack/maccms10
+Copyright © 2014-2021 by magicblack
+依据 Apache License 2.0 发布。
+template/tvideo/html/rss/ 下的 7 个 RSS / Sitemap 模板复制自 maccms10 默认主题，未做修改。

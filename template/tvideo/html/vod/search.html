@@ -1,0 +1,43 @@
+{extend name="public/base" /}
+{block name="title"}{php}echo $param['wd'] !== '' ? $param['wd'] : ($param['actor'] !== '' ? $param['actor'] : $param['director']);{/php} 搜索结果 - {$maccms.site_name}{/block}
+{block name="head"}<meta name="robots" content="noindex,follow">{/block}
+{block name="body_class"}tv-page-search{/block}
+{block name="main"}
+{php}
+$tv_kw = $param['wd'] !== '' ? $param['wd'] : ($param['actor'] !== '' ? $param['actor'] : ($param['director'] !== '' ? $param['director'] : $param['tag']));
+$tv_kw_label = $param['actor'] !== '' ? '主演' : ($param['director'] !== '' ? '导演' : '');
+{/php}
+{maccms:vod num="24" paging="yes" pageurl="vod/search" order="desc" by="time" id="vo" key="sk0"}{/maccms:vod}
+<header class="tv-page-hd">
+  <h1>{if condition="$tv_kw neq ''"}{if condition="$tv_kw_label neq ''"}{$tv_kw_label}：{/if}“{$tv_kw}”{else/}搜索{/if}</h1>
+  <p>共找到 <span class="tv-num">{$__PAGING__.record_total|default=0}</span> 部相关影片</p>
+</header>
+
+<div class="tv-grid tv-grid--v">
+  {maccms:vod num="24" paging="yes" pageurl="vod/search" order="desc" by="time" id="vo" key="sk"}
+  {include file="public/card_v" /}
+  {/maccms:vod}
+</div>
+{include file="public/paging" /}
+
+{if condition="empty($__PAGING__['record_total'])"}
+{php}$tv_empty_text = $tv_kw !== '' ? '没有找到与“' . $tv_kw . '”相关的影片，换个关键词试试' : '输入片名、演员或导演开始搜索';{/php}
+{include file="public/empty" /}
+{if condition="!empty($tv_hot)"}
+<section class="tv-sec">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">大家都在搜</h2></header>
+  <div class="tv-chips">
+    {volist name="tv_hot" id="hw"}<a class="tv-chip" href="{:mac_url_search(['wd' => $hw])}">{$hw}</a>{/volist}
+  </div>
+</section>
+{/if}
+<section class="tv-sec">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">热播推荐</h2></header>
+  <div class="tv-grid tv-grid--v">
+    {maccms:vod num="14" order="desc" by="hits_week" id="vo" key="rk"}
+    {include file="public/card_v" /}
+    {/maccms:vod}
+  </div>
+</section>
+{/if}
+{/block}

@@ -1,0 +1,12 @@
+<div class="tv-pop-info">
+  <div class="tv-menu__head">
+    <img src="{:mac_get_user_portrait($obj['user_id'])}" alt="" width="44" height="44">
+    <div><strong>{:mac_default($obj['user_nick_name'], $obj['user_name'])}</strong><em>{$obj.group.group_name|default='会员'} · 积分 {$obj.user_points|default=0}</em></div>
+  </div>
+  <div class="tv-pop-info__links">
+    <a class="tv-btn" href="{:mac_url('user/index')}">个人中心</a>
+    <a class="tv-btn" href="{:mac_url('user/plays')}">播放记录</a>
+    <a class="tv-btn" href="{:mac_url('user/favs')}">我的收藏</a>
+    <button class="tv-btn" type="button" data-tv-logout>退出登录</button>
+  </div>
+</div>

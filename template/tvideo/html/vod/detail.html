@@ -1,0 +1,76 @@
+{extend name="public/base" /}
+{block name="title"}{$obj.vod_name}{if condition="$obj.vod_remarks neq ''"} {$obj.vod_remarks}{/if} - 在线观看 - {$maccms.site_name}{/block}
+{block name="keywords"}{$obj.vod_name},{$obj.vod_name}在线观看,{$obj.type.type_name}{if condition="$obj.vod_actor neq ''"},{$obj.vod_actor}{/if}{/block}
+{block name="description"}{:mac_substring(mac_default($obj['vod_blurb'], strip_tags($obj['vod_content'])), 120)}{/block}
+{block name="head"}<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/play.css?v={$tv_v}">{/block}
+{block name="body_class"}tv-has-hero tv-page-detail{/block}
+{block name="main"}
+{include file="vod/vars" /}
+<section class="tv-detail">
+  <div class="tv-detail__bg" aria-hidden="true"><img src="{:mac_url_img(mac_default($obj['vod_pic_slide'], $obj['vod_pic']))}" alt=""></div>
+  <div class="tv-detail__inner">
+    <div class="tv-detail__poster">
+      <img src="{:mac_url_img($obj['vod_pic'])}" alt="{$obj.vod_name}" fetchpriority="high" data-ph="v">
+      {php}$vo = $obj;{/php}{include file="public/badge" /}
+    </div>
+    <div class="tv-detail__info">
+      <div class="tv-detail__head">
+        <h1 class="tv-detail__title">{$obj.vod_name}</h1>
+        {if condition="$obj.vod_sub neq ''"}<p class="tv-detail__sub">{$obj.vod_sub}</p>{/if}
+        <div class="tv-detail__meta">
+          {if condition="$obj.vod_score gt 0"}<span class="tv-score tv-detail__score">{$obj.vod_score}<small>分</small></span>{/if}
+          <a href="{:mac_url_type($obj['type'])}">{$obj.type.type_name}</a>
+          {if condition="$obj.vod_year neq ''"}<span>{$obj.vod_year}</span>{/if}
+          {if condition="$obj.vod_area neq ''"}<span>{$obj.vod_area}</span>{/if}
+          {if condition="$obj.vod_lang neq ''"}<span>{$obj.vod_lang}</span>{/if}
+          {if condition="$obj.vod_remarks neq ''"}<span class="tv-detail__remarks">{$obj.vod_remarks}</span>{/if}
+        </div>
+        {if condition="!empty($tv_classes)"}
+        <div class="tv-detail__tags">{volist name="tv_classes" id="cl"}<a class="tv-chip" href="{:mac_url_type($obj['type'], ['class' => $cl], 'show')}">{$cl}</a>{/volist}</div>
+        {/if}
+        <dl class="tv-detail__people">
+          {if condition="!empty($tv_directors)"}<div><dt>导演</dt><dd>{volist name="tv_directors" id="pp"}<a href="{:mac_url_search(['director' => $pp])}">{$pp}</a>{/volist}</dd></div>{/if}
+          {if condition="!empty($tv_actors)"}<div><dt>主演</dt><dd>{volist name="tv_actors" id="pp" length="8"}<a href="{:mac_url_search(['actor' => $pp])}">{$pp}</a>{/volist}</dd></div>{/if}
+        </dl>
+      </div>
+      <div class="tv-detail__desc" data-tv-expand>
+        <div class="tv-detail__desc-text" data-tv-expand-body>{$tv_content}</div>
+        <button class="tv-detail__desc-btn" type="button" data-tv-expand-btn hidden>展开<svg class="tv-ico"><use href="#i-right"/></svg></button>
+      </div>
+      <div class="tv-detail__acts">
+        {if condition="!empty($tv_first)"}
+        <a class="tv-btn tv-btn--primary tv-btn--lg" href="{:mac_url_vod_play($obj, ['sid' => $tv_first['sid'], 'nid' => 1])}"><svg class="tv-ico"><use href="#i-play"/></svg>立即播放</a>
+        {/if}
+        <button class="tv-btn tv-btn--lg{if condition="$tv_fav.is_fav"} is-on{/if}" type="button" data-tv-fav data-id="{$obj.vod_id}" data-ulog="{$tv_fav.fav_ulog_id}"><svg class="tv-ico"><use href="#i-heart"/></svg><span>{if condition="$tv_fav.is_fav"}已收藏{else/}收藏{/if}</span></button>
+        <button class="tv-btn tv-btn--lg" type="button" data-tv-share data-title="{$obj.vod_name}"><svg class="tv-ico"><use href="#i-share"/></svg><span>分享</span></button>
+        {if condition="!empty($obj['vod_down_list'])"}
+        <a class="tv-btn tv-btn--lg" href="{:mac_url_vod_down($obj, ['sid' => 1, 'nid' => 1])}"><svg class="tv-ico"><use href="#i-down"/></svg><span>下载</span></a>
+        {/if}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tv-sec tv-detail__eps">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">{if condition="$tv_is_movie"}播放源{else/}选集{/if}</h2>{if condition="!$tv_is_movie && $obj.vod_total gt 0"}<span class="tv-sec__note">{if condition="$obj.vod_isend eq 1"}全{$obj.vod_total}集{else/}{$obj.vod_remarks}{/if}</span>{/if}</header>
+  {include file="public/eps" /}
+</section>
+
+<section class="tv-sec">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">猜你喜欢</h2><a class="tv-sec__more" href="{:mac_url_type($tv_root_info)}">更多{$tv_root_info.type_name}<svg class="tv-ico"><use href="#i-right"/></svg></a></header>
+  <div class="tv-rail tv-rail--v" data-tv-rail><div class="tv-rail__track">
+    {maccms:vod num="14" type="'.$tv_root_info['type_id'].'" order="desc" by="hits_week" not="'.$obj['vod_id'].'" id="vo" key="rk"}
+    {include file="public/card_v" /}
+    {/maccms:vod}
+  </div></div>
+</section>
+
+{if condition="$comment.status eq 1"}
+<section class="tv-sec" id="comment">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">评论</h2></header>
+  <div class="mac_comment tv-cmt" data-mid="1" data-id="{$obj.vod_id}" data-login="{$comment.login}" data-verify="{$comment.verify}"><div class="tv-skel tv-skel--cmt"></div></div>
+</section>
+{/if}
+<span class="mac_hits" data-mid="1" data-id="{$obj.vod_id}" data-type="hits" hidden></span>
+{if condition="$tv_login"}<span class="mac_ulog_set" data-mid="1" data-id="{$obj.vod_id}" data-type="1" hidden></span>{/if}
+{/block}

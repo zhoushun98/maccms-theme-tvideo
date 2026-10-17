@@ -1,0 +1,26 @@
+{php}
+$tv_js = [
+    'path' => rtrim((string)$maccms['path'], '/'),
+    'path_assets' => (string)$maccms['path'],
+    'path_tpl' => (string)$maccms['path_tpl'],
+    'base_url' => (string)$maccms['http_type'] . (string)$maccms['site_url'],
+    'mid' => (string)$maccms['mid'],
+    'aid' => (string)$maccms['aid'],
+    'url' => (string)$maccms['site_url'],
+    'wapurl' => (string)$maccms['site_wapurl'],
+    'mob_status' => (string)$maccms['mob_status'],
+    'site_name' => (string)$maccms['site_name'],
+    'csrfToken' => isset($csrf_token) ? (string)$csrf_token : '',
+    'tv' => [
+        'login' => mac_url('user/login'),
+        'reg' => mac_url('user/reg'),
+        'user' => mac_url('user/index'),
+        'plays' => mac_url('user/plays'),
+        'favs' => mac_url('user/favs'),
+        'search' => mac_url('vod/search'),
+        'ph_v' => (string)$maccms['path_tpl'] . 'asset/img/ph-v.svg',
+        'ph_h' => (string)$maccms['path_tpl'] . 'asset/img/ph-h.svg',
+    ],
+];
+echo '<script>var maccms=' . json_encode($tv_js, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) . ';var MAC_PATH=maccms.path;</script>';
+{/php}

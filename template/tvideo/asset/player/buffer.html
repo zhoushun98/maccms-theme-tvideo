@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>buffering</title>
+<!-- 播放中缓冲时由 dplayer.html 以 iframe 盖在视频上（MacPlayer.Buffer，见 player-guard.js）；背景透明，只显示转圈 -->
+<style>
+html, body { margin: 0; height: 100%; overflow: hidden; background: transparent; }
+body { display: flex; align-items: center; justify-content: center; }
+.ring { display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: 50%; background: rgba(0, 0, 0, .45); }
+.ring i { width: 30px; height: 30px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .18); border-top-color: #00d1d1; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body><div class="ring"><i></i></div></body>
+</html>

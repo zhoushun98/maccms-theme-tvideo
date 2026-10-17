@@ -1,0 +1,75 @@
+{extend name="public/base" /}
+{block name="title"}{$obj.type_name}片库 - 按类型地区年份筛选 - {$maccms.site_name}{/block}
+{block name="keywords"}{:mac_default($obj['type_key'], $obj['type_name'])}{/block}
+{block name="description"}{:mac_default($obj['type_des'], $maccms['site_description'])}{/block}
+{block name="body_class"}tv-page-show{/block}
+{block name="main"}
+{php}
+$tv_root_info = !empty($obj['type_pid']) && !empty($obj['parent']) ? $obj['parent'] : $obj;
+$tv_is_h = false; // 采集源只有竖版海报，统一竖卡；有横版剧照时可改回按 type_en 切换（如综艺）
+$tx = is_array($obj['type_extend']) ? $obj['type_extend'] : [];
+$px = !empty($obj['parent']) && is_array($obj['parent']['type_extend']) ? $obj['parent']['type_extend'] : [];
+$tv_filters = [];
+foreach (['class' => '类型', 'area' => '地区', 'year' => '年份', 'lang' => '语言'] as $fk => $fn) {
+    $src = !empty($tx[$fk]) ? $tx[$fk] : (!empty($px[$fk]) ? $px[$fk] : (string)$maccms['vod_extend_' . $fk]);
+    $items = array_values(array_unique(array_filter(array_map('trim', explode(',', $src)), 'strlen')));
+    if (!empty($items)) {
+        $tv_filters[$fk] = ['name' => $fn, 'items' => $items];
+    }
+}
+$tv_sorts = ['time' => '最近更新', 'hits' => '最多播放', 'score' => '最高评分'];
+$tv_by = in_array($param['by'], array_keys($tv_sorts), true) ? $param['by'] : 'time';
+$tv_base = $param;
+unset($tv_base['page']);
+{/php}
+<header class="tv-page-hd">
+  <h1>{$tv_root_info.type_name}片库</h1>
+  <p>按类型、地区、年份快速找片</p>
+</header>
+<div class="tv-filter">
+  <div class="tv-filter__row">
+    <span class="tv-filter__label">频道</span>
+    <div class="tv-filter__opts" data-tv-filter-row>
+      {volist name="tv_nav_types" id="ft"}
+      <a class="{if condition="$ft.type_id eq $tv_root_info.type_id"}is-active{/if}" href="{:mac_url_type($ft, [], 'show')}">{$ft.type_name}</a>
+      {/volist}
+    </div>
+  </div>
+  <div class="tv-filter__row">
+    <span class="tv-filter__label">分类</span>
+    <div class="tv-filter__opts" data-tv-filter-row>
+      <a class="{if condition="empty($obj['type_pid'])"}is-active{/if}" href="{:mac_url_type($tv_root_info, array_merge($tv_base, ['id' => '']), 'show')}">全部</a>
+      {maccms:type parent="'.$tv_root_info['type_id'].'" order="asc" by="sort" num="30" id="sub" key="subk"}
+      <a class="{if condition="$sub.type_id eq $obj.type_id"}is-active{/if}" href="{:mac_url_type($sub, array_merge($tv_base, ['id' => '']), 'show')}">{$sub.type_name}</a>
+      {/maccms:type}
+    </div>
+  </div>
+  {foreach name="tv_filters" item="fr" key="fk"}
+  <div class="tv-filter__row">
+    <span class="tv-filter__label">{$fr.name}</span>
+    <div class="tv-filter__opts" data-tv-filter-row>
+      <a class="{if condition="$param[$fk] eq ''"}is-active{/if}" href="{:mac_url_type($obj, array_merge($tv_base, [$fk => '']), 'show')}">全部</a>
+      {foreach name="fr.items" item="it"}
+      <a class="{if condition="$param[$fk] eq $it"}is-active{/if}" href="{:mac_url_type($obj, array_merge($tv_base, [$fk => $it]), 'show')}">{$it}</a>
+      {/foreach}
+    </div>
+  </div>
+  {/foreach}
+  <div class="tv-filter__row">
+    <span class="tv-filter__label">排序</span>
+    <div class="tv-filter__opts" data-tv-filter-row>
+      {foreach name="tv_sorts" item="sn" key="sk"}
+      <a class="{if condition="$tv_by eq $sk"}is-active{/if}" href="{:mac_url_type($obj, array_merge($tv_base, ['by' => $sk]), 'show')}">{$sn}</a>
+      {/foreach}
+    </div>
+  </div>
+</div>
+
+<div class="tv-grid {if condition="$tv_is_h"}tv-grid--h{else/}tv-grid--v{/if}">
+  {maccms:vod num="30" paging="yes" pageurl="vod/show" type="current" order="desc" by="time" id="vo" key="lk"}
+  {if condition="$tv_is_h"}{include file="public/card_h" /}{else/}{include file="public/card_v" /}{/if}
+  {/maccms:vod}
+</div>
+{if condition="empty($__PAGING__['record_total'])"}{php}$tv_empty_text = '没有找到符合条件的影片，换个条件试试';{/php}{include file="public/empty" /}{/if}
+{include file="public/paging" /}
+{/block}

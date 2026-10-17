@@ -1,0 +1,50 @@
+{include file="public/fn" /}
+<form class="comment_form tv-cmt__form" action="javascript:;" onsubmit="return false">
+  <input type="hidden" name="comment_pid" value="0">
+  <textarea class="comment_content tv-input" name="comment_content" maxlength="200" placeholder="{if condition="$comment.login eq 1 && $user.user_id lt 1"}登录后参与评论{else/}说点什么吧，文明发言{/if}"></textarea>
+  <div class="tv-cmt__bar">
+    <span class="tv-cmt__count">还可输入 <span class="comment_remaining">200</span> 字</span>
+    {if condition="$comment.verify eq 1"}
+    <input class="tv-input tv-cmt__verify" type="text" name="verify" placeholder="验证码" autocomplete="off" maxlength="6">
+    <img class="mac_verify_img" src="{:mac_url('verify/index')}" alt="验证码" title="看不清？点击刷新">
+    {/if}
+    <button class="tv-btn tv-btn--primary tv-btn--sm comment_submit" type="button">发布</button>
+  </div>
+</form>
+<ul class="tv-cmt__list">
+  {maccms:comment num="10" paging="yes" order="desc" by="id" id="cm" key="cmk"}
+  <li class="tv-cmt__item">
+    <img class="tv-cmt__avatar" src="{:mac_get_user_portrait((int)$cm['user_id'])}" alt="" loading="lazy" width="36" height="36">
+    <div class="tv-cmt__body">
+      <div class="tv-cmt__meta"><strong>{$cm.comment_name}</strong><time datetime="{:date('c', (int)$cm['comment_time'])}">{:tv_ago($cm['comment_time'])}</time></div>
+      <div class="tv-cmt__text">{$cm.comment_content|mac_em_replace}</div>
+      <div class="tv-cmt__acts">
+        <a class="digg_link" href="javascript:;" data-id="{$cm.comment_id}" data-mid="4" data-type="up" aria-label="赞"><svg class="tv-ico"><use href="#i-heart"/></svg><em class="digg_num">{$cm.comment_up}</em></a>
+        <a class="comment_reply" href="javascript:;" data-id="{$cm.comment_id}">回复</a>
+      </div>
+      {if condition="!empty($cm['sub'])"}
+      <ul class="tv-cmt__replies">
+        {maccms:foreach name="$cm.sub" id="cs"}
+        <li class="tv-cmt__item tv-cmt__item--reply">
+          <img class="tv-cmt__avatar" src="{:mac_get_user_portrait((int)$cs['user_id'])}" alt="" loading="lazy" width="28" height="28">
+          <div class="tv-cmt__body">
+            <div class="tv-cmt__meta"><strong>{$cs.comment_name}</strong><time>{:tv_ago($cs['comment_time'])}</time></div>
+            <div class="tv-cmt__text">{$cs.comment_content|mac_em_replace}</div>
+          </div>
+        </li>
+        {/maccms:foreach}
+      </ul>
+      {/if}
+    </div>
+  </li>
+  {/maccms:comment}
+</ul>
+{if condition="empty($__PAGING__['record_total'])"}
+<p class="tv-cmt__empty">还没有评论，来抢沙发吧</p>
+{elseif condition="$__PAGING__['page_total'] gt 1"/}
+<nav class="tv-paging tv-paging--sm">
+  {if condition="$__PAGING__['page_current'] gt 1"}<a class="tv-paging__btn" href="javascript:;" onclick="MAC.Comment.Show({$__PAGING__.page_prev})">上一页</a>{/if}
+  <span class="tv-paging__num is-active">{$__PAGING__.page_current} / {$__PAGING__.page_total}</span>
+  {if condition="$__PAGING__['page_current'] lt $__PAGING__['page_total']"}<a class="tv-paging__btn" href="javascript:;" onclick="MAC.Comment.Show({$__PAGING__.page_next})">下一页</a>{/if}
+</nav>
+{/if}

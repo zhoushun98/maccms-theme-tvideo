@@ -1,0 +1,33 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#141414">
+<meta name="color-scheme" content="dark">
+<meta name="format-detection" content="telephone=no">
+{php}
+/* 主题公共变量：资源版本号、当前所属顶级分类、品牌简称 */
+$tv_tpl_dir = ROOT_PATH . substr(MAC_PATH_TEMPLATE, strlen(MAC_PATH));
+$tv_v = substr(md5(@filemtime($tv_tpl_dir . 'asset/css/main.css') . '|' . @filemtime($tv_tpl_dir . 'asset/js/tv.js') . '|' . @filemtime($tv_tpl_dir . 'asset/css/play.css') . '|' . @filemtime($tv_tpl_dir . 'asset/css/user.css') . '|' . @filemtime($tv_tpl_dir . 'asset/js/player-guard.js') . '|' . @filemtime($tv_tpl_dir . 'asset/player/buffer.html')), 0, 8);
+$tv_aid = isset($maccms['aid']) ? (int)$maccms['aid'] : 0;
+$tv_root = 0;
+if (isset($obj) && is_array($obj)) {
+    if (isset($obj['vod_id'])) {
+        $tv_root = !empty($obj['type_id_1']) ? (int)$obj['type_id_1'] : (int)$obj['type_id'];
+    } elseif (isset($obj['type_id']) && isset($obj['type_pid'])) {
+        $tv_root = !empty($obj['type_pid']) ? (int)$obj['type_pid'] : (int)$obj['type_id'];
+    }
+}
+$tv_brand = trim(preg_split('/\s*[-|_—–]\s*|、|，|,/u', (string)$maccms['site_name'])[0]);
+if ($tv_brand === '' || mb_strlen($tv_brand, 'UTF-8') > 8) {
+    $tv_brand = '视频';
+}
+$tv_login = !empty($user['user_id']) && (int)$user['user_id'] > 0;
+$tv_hot = array_values(array_filter(array_map('trim', explode(',', (string)$maccms['search_hot']))));
+{/php}
+{include file="public/fn" /}
+<link rel="icon" href="{$maccms.path_tpl}asset/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/main.css?v={$tv_v}">
+{include file="public/jsvar" /}
+<script src="{$maccms.path}static_new/js/jquery.js"></script>
+<script defer src="{$maccms.path}static_new/js/home.js"></script>
+<script defer src="{$maccms.path_tpl}asset/js/tv.js?v={$tv_v}"></script>

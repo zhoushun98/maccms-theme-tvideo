@@ -1,0 +1,26 @@
+{extend name="public/base" /}
+{block name="title"}{$param.ac_text|default='邮箱'}找回密码 - {$maccms.site_name}{/block}
+{block name="head"}<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/user.css?v={$tv_v}"><meta name="robots" content="noindex,follow">{/block}
+{block name="body_class"}tv-page-auth{/block}
+{block name="main"}
+{php}$tv_ac = (isset($param['ac']) && $param['ac'] === 'phone') ? 'phone' : 'email';{/php}
+<div class="tv-auth">
+  {include file="user/auth_side" /}
+  <div class="tv-auth__card">
+    <div class="tv-auth__tabs"><a href="{:mac_url('user/findpass')}">密保找回</a><a class="{if condition="$tv_ac eq 'email'"}is-active{/if}" href="{:mac_url('user/findpass_msg')}?ac=email">邮箱找回</a><a class="{if condition="$tv_ac eq 'phone'"}is-active{/if}" href="{:mac_url('user/findpass_msg')}?ac=phone">手机找回</a></div>
+    <form class="tv-form" action="{:mac_url('user/findpass_reset')}" method="post" data-tv-ajax-form data-success="{:mac_url('user/login')}">
+      <input type="hidden" name="ac" value="{$tv_ac}">
+      <div class="tv-field tv-field__row">
+        <input class="tv-input" type="{if condition="$tv_ac eq 'phone'"}tel{else/}email{/if}" name="to" placeholder="{if condition="$tv_ac eq 'phone'"}绑定的手机号{else/}绑定的邮箱{/if}" required>
+        <button class="tv-btn tv-btn--sm tv-code-btn" type="button" data-tv-send-code="{:mac_url('user/findpass_msg')}">获取验证码</button>
+      </div>
+      <div class="tv-field"><input class="tv-input" type="text" name="code" placeholder="验证码" maxlength="8" required></div>
+      <div class="tv-field"><input class="tv-input" type="password" name="user_pwd" placeholder="新密码（至少 6 位）" autocomplete="new-password" required></div>
+      <div class="tv-field"><input class="tv-input" type="password" name="user_pwd2" placeholder="确认新密码" autocomplete="new-password" required></div>
+      <p class="tv-form__msg" data-tv-form-msg></p>
+      <button class="tv-btn tv-btn--primary tv-btn--block" type="submit">重置密码</button>
+      <div class="tv-form__links"><span>需要先在资料中绑定{if condition="$tv_ac eq 'phone'"}手机号{else/}邮箱{/if}，且站点已配置发信服务</span></div>
+    </form>
+  </div>
+</div>
+{/block}

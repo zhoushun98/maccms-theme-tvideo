@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 安全问题
+    url: https://github.com/zhoushun98/maccms-theme-tvideo/security/advisories/new
+    about: 请通过私密漏洞报告提交，不要公开提 issue
+  - name: maccms10 程序本身的问题
+    url: https://github.com/magicblack/maccms10/issues
+    about: 后台、采集、数据库等非主题问题请到 maccms10 项目反馈

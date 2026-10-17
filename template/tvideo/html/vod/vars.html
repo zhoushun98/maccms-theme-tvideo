@@ -1,0 +1,27 @@
+{php}
+/* 详情页、播放页共用的派生变量 */
+$tv_split = function ($s) {
+    $s = str_replace(['，', '、', '/', '|', ' / '], ',', (string)$s);
+    return array_values(array_unique(array_filter(array_map('trim', explode(',', $s)), 'strlen')));
+};
+$tv_actors = $tv_split($obj['vod_actor']);
+$tv_directors = $tv_split($obj['vod_director']);
+$tv_classes = array_slice($tv_split($obj['vod_class']), 0, 4);
+$tv_first = !empty($obj['vod_play_list']) && is_array($obj['vod_play_list']) ? reset($obj['vod_play_list']) : [];
+$tv_fav = mac_user_fav_state(isset($user['user_id']) ? (int)$user['user_id'] : 0, 1, (int)$obj['vod_id']);
+$tv_content = trim(strip_tags((string)$obj['vod_content'], '<p><br>'));
+if ($tv_content === '') {
+    $tv_content = $obj['vod_blurb'] !== '' ? htmlspecialchars($obj['vod_blurb']) : '暂无简介';
+}
+$tv_root_info = !empty($obj['type_1']) && !empty($obj['type_1']['type_id']) ? $obj['type_1'] : $obj['type'];
+$tv_is_movie = isset($tv_root_info['type_en']) && $tv_root_info['type_en'] === 'dianying';
+if (!$tv_is_movie && !empty($obj['vod_play_list'])) {
+    $tv_is_movie = true;
+    foreach ($obj['vod_play_list'] as $tv_pl) {
+        if ((int)$tv_pl['url_count'] > 1) {
+            $tv_is_movie = false;
+            break;
+        }
+    }
+}
+{/php}

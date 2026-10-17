@@ -1,0 +1,9 @@
+{extend name="public/sys" /}
+{block name="title"}请在浏览器中打开{/block}
+{block name="main"}
+<div class="tv-sys__ico">↗</div>
+<h1 class="tv-sys__title">请在浏览器中打开</h1>
+<p class="tv-sys__desc">点击右上角「…」，选择「在浏览器中打开」即可正常观看</p>
+<p class="tv-sys__url" id="tv-url"></p>
+<script>document.getElementById('tv-url').textContent = location.href;</script>
+{/block}

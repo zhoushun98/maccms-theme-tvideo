@@ -1,0 +1,15 @@
+{include file="public/fn" /}
+<ul class="tv-cmt__list">
+  {maccms:gbook num="15" paging="yes" order="desc" by="id" id="gb" key="gbk"}
+  <li class="tv-cmt__item">
+    <img class="tv-cmt__avatar" src="{:mac_get_user_portrait((int)$gb['user_id'])}" alt="" loading="lazy" width="36" height="36">
+    <div class="tv-cmt__body">
+      <div class="tv-cmt__meta"><strong>{$gb.gbook_name}</strong><time>{:tv_ago($gb['gbook_time'])}</time></div>
+      <div class="tv-cmt__text">{$gb.gbook_content|mac_em_replace}</div>
+      {if condition="$gb.gbook_reply neq ''"}<div class="tv-cmt__reply"><b>站长回复：</b>{$gb.gbook_reply}</div>{/if}
+    </div>
+  </li>
+  {/maccms:gbook}
+</ul>
+{if condition="empty($__PAGING__['record_total'])"}<p class="tv-cmt__empty">还没有留言</p>{/if}
+{include file="public/paging" /}

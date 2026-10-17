@@ -1,0 +1,37 @@
+{extend name="public/base" /}
+{block name="title"}{$obj.vod_name} 下载地址 - {$maccms.site_name}{/block}
+{block name="head"}<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/play.css?v={$tv_v}"><meta name="robots" content="noindex,follow">{/block}
+{block name="body_class"}tv-page-down{/block}
+{block name="main"}
+{include file="vod/vars" /}
+<header class="tv-page-hd">
+  <h1>{$obj.vod_name} · 下载</h1>
+  <p><a class="tv-link" href="{:mac_url_vod_detail($obj)}">返回详情</a>{if condition="!empty($tv_first)"} · <a class="tv-link" href="{:mac_url_vod_play($obj, ['sid' => $tv_first['sid'], 'nid' => 1])}">在线播放</a>{/if}</p>
+</header>
+{if condition="!empty($popedom['code']) && $popedom['code'] gt 1"}
+<div class="tv-alert"><svg class="tv-ico"><use href="#i-lock"/></svg>{$popedom.msg|default='暂无下载权限'}{if condition="!$tv_login"} <a class="tv-link" href="{:mac_url('user/login')}" data-tv-login>登录</a>{/if}</div>
+{/if}
+{if condition="!empty($obj['vod_down_list'])"}
+{foreach name="obj.vod_down_list" item="dl"}
+<section class="tv-sec tv-down">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">下载地址 {$dl.sid}</h2><span class="tv-sec__note">共 {$dl.url_count} 个</span></header>
+  <ul class="tv-down__list">
+    {foreach name="dl.urls" item="du"}
+    <li class="tv-down__item">
+      <span class="tv-down__name">{$du.name}</span>
+      {if condition="!empty($du['locked']) || $du['url'] eq ''"}
+      <span class="tv-down__url is-locked"><svg class="tv-ico"><use href="#i-lock"/></svg>需要权限</span>
+      {else/}
+      <input class="tv-down__url" type="text" value="{$du.url}" readonly aria-label="下载地址">
+      <button class="tv-btn tv-btn--sm" type="button" data-tv-copy="{$du.url}"><svg class="tv-ico"><use href="#i-copy"/></svg>复制</button>
+      {/if}
+    </li>
+    {/foreach}
+  </ul>
+</section>
+{/foreach}
+{else/}
+{php}$tv_empty_text = '暂无下载地址';{/php}{include file="public/empty" /}
+{/if}
+{if condition="$tv_login"}<span class="mac_ulog_set" data-mid="1" data-id="{$obj.vod_id}" data-sid="{$param.sid}" data-nid="{$param.nid}" data-type="5" hidden></span>{/if}
+{/block}

@@ -1,0 +1,37 @@
+{extend name="public/base" /}
+{block name="title"}注册 - {$maccms.site_name}{/block}
+{block name="head"}<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/user.css?v={$tv_v}"><meta name="robots" content="noindex,follow">{/block}
+{block name="body_class"}tv-page-auth{/block}
+{block name="main"}
+<div class="tv-auth">
+  {include file="user/auth_side" /}
+  <div class="tv-auth__card">
+    <div class="tv-auth__tabs"><a href="{:mac_url('user/login')}">登录</a><a class="is-active" href="{:mac_url('user/reg')}">注册</a></div>
+    {if condition="$user_config.reg_status eq 0"}
+    <p class="tv-auth__closed">本站暂未开放注册</p>
+    {else/}
+    <form class="tv-form" action="{:mac_url('user/reg')}" method="post" data-tv-ajax-form data-success="{:mac_url('user/index')}">
+      <div class="tv-field"><input class="tv-input" type="text" name="user_name" placeholder="用户名（字母和数字，至少 6 位）" autocomplete="username" maxlength="30" required></div>
+      <div class="tv-field"><input class="tv-input" type="password" name="user_pwd" placeholder="密码（至少 6 位）" autocomplete="new-password" maxlength="32" required></div>
+      <div class="tv-field"><input class="tv-input" type="password" name="user_pwd2" placeholder="确认密码" autocomplete="new-password" maxlength="32" required></div>
+      {if condition="$user_config.reg_phone_sms neq 0"}
+      <input type="hidden" name="ac" value="phone">
+      <div class="tv-field tv-field__row"><input class="tv-input" type="tel" name="to" placeholder="手机号" maxlength="11" required><button class="tv-btn tv-btn--sm tv-code-btn" type="button" data-tv-send-code="{:mac_url('user/reg_msg')}">获取验证码</button></div>
+      <div class="tv-field"><input class="tv-input" type="text" name="code" placeholder="短信验证码" maxlength="8" required></div>
+      {elseif condition="$user_config.reg_email_sms neq 0"/}
+      <input type="hidden" name="ac" value="email">
+      <div class="tv-field tv-field__row"><input class="tv-input" type="email" name="to" placeholder="邮箱" maxlength="60" required><button class="tv-btn tv-btn--sm tv-code-btn" type="button" data-tv-send-code="{:mac_url('user/reg_msg')}">获取验证码</button></div>
+      <div class="tv-field"><input class="tv-input" type="text" name="code" placeholder="邮箱验证码" maxlength="8" required></div>
+      {/if}
+      {if condition="$user_config.reg_verify neq 0"}
+      <div class="tv-field tv-field__row"><input class="tv-input" type="text" name="verify" placeholder="验证码" autocomplete="off" maxlength="6" required><img class="mac_verify_img" src="{:url('verify/index')}" alt="验证码" title="看不清？点击刷新"></div>
+      {/if}
+      <div class="tv-field"><input class="tv-input" type="text" name="invite_code" placeholder="邀请码（选填）" value="{$param.invite_code|default=''}" autocomplete="off" maxlength="20"></div>
+      <p class="tv-form__msg" data-tv-form-msg></p>
+      <button class="tv-btn tv-btn--primary tv-btn--block" type="submit">注册并登录</button>
+      <div class="tv-form__links"><a href="{:mac_url('user/login')}">已有账号？去登录</a></div>
+    </form>
+    {/if}
+  </div>
+</div>
+{/block}

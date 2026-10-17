@@ -1,0 +1,14 @@
+{extend name="public/base" /}
+{block name="title"}{$obj.vod_name} - 版权提示 - {$maccms.site_name}{/block}
+{block name="head"}<meta name="robots" content="noindex,follow">{/block}
+{block name="main"}
+<section class="tv-notice">
+  <svg class="tv-notice__ico"><use href="#i-warn"/></svg>
+  <h1 class="tv-notice__title">{$obj.vod_name|default='该影片'}</h1>
+  <p class="tv-notice__desc">{$GLOBALS['config']['app']['copyright_notice']}</p>
+  <div class="tv-notice__acts">
+    <a class="tv-btn tv-btn--primary" href="{$maccms.path}">返回首页</a>
+    {if condition="!empty($obj['type'])"}<a class="tv-btn" href="{:mac_url_type($obj['type'])}">看看其他{$obj.type.type_name}</a>{/if}
+  </div>
+</section>
+{/block}

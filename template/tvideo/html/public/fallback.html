@@ -1,0 +1,14 @@
+{extend name="public/base" /}
+{block name="title"}栏目暂未开放 - {$maccms.site_name}{/block}
+{block name="head"}<meta name="robots" content="noindex,follow">{/block}
+{block name="main"}
+<section class="tv-notice">
+  <svg class="tv-notice__ico"><use href="#i-grid"/></svg>
+  <h1 class="tv-notice__title">该栏目暂未开放</h1>
+  <p class="tv-notice__desc">本站目前专注于影视内容，这个栏目正在建设中，去看看别的吧。</p>
+  <div class="tv-notice__acts">
+    <a class="tv-btn tv-btn--primary" href="{$maccms.path}">返回首页</a>
+    <a class="tv-btn" href="{:mac_url('label/rank')}">看看排行榜</a>
+  </div>
+</section>
+{/block}

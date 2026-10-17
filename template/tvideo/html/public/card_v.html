@@ -1,0 +1,9 @@
+<a class="tv-card tv-card--v" href="{:mac_url_vod_detail($vo)}" title="{$vo.vod_name}">
+  <div class="tv-card__pic">
+    <img src="{:mac_url_img($vo['vod_pic'])}" alt="{$vo.vod_name}" loading="lazy" decoding="async" data-ph="v">
+    {include file="public/badge" /}
+    {if condition="$vo.vod_remarks neq ''"}<span class="tv-card__note">{$vo.vod_remarks}</span>{/if}
+  </div>
+  <p class="tv-card__title">{$vo.vod_name}</p>
+  <p class="tv-card__sub">{:mac_substring(mac_default($vo['vod_blurb'], $vo['vod_actor']), 40)}</p>
+</a>

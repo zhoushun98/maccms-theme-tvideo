@@ -1,0 +1,23 @@
+{extend name="public/base" /}
+{block name="title"}留言反馈 - {$maccms.site_name}{/block}
+{block name="body_class"}tv-page-gbook{/block}
+{block name="main"}
+<header class="tv-page-hd"><h1>留言反馈</h1><p>求片、报错、建议都可以在这里告诉我们</p></header>
+<div class="tv-gbook">
+  <form class="gbook_form tv-cmt__form" action="javascript:;" onsubmit="return false" data-login="{$gbook.login}" data-verify="{$gbook.verify}">
+    <textarea class="gbook_content tv-input" name="gbook_content" maxlength="200" placeholder="请输入留言内容，如求片请写明片名"></textarea>
+    <div class="tv-cmt__bar">
+      <span class="tv-cmt__count">还可输入 <span class="gbook_remaining">200</span> 字</span>
+      {if condition="$gbook.verify eq 1"}
+      <input class="tv-input tv-cmt__verify" type="text" name="verify" placeholder="验证码" autocomplete="off" maxlength="6">
+      <img class="mac_verify_img" src="{:mac_url('verify/index')}" alt="验证码" title="看不清？点击刷新">
+      {/if}
+      <button class="tv-btn tv-btn--primary tv-btn--sm gbook_submit" type="button">提交留言</button>
+    </div>
+  </form>
+  <section class="tv-sec">
+    <header class="tv-sec__hd"><h2 class="tv-sec__title">最新留言</h2></header>
+    {include file="gbook/ajax" /}
+  </section>
+</div>
+{/block}

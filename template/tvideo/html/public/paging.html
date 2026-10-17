@@ -1,0 +1,12 @@
+{if condition="!empty($__PAGING__['page_total']) && $__PAGING__['page_total'] gt 1"}
+{php}$tv_pg = $__PAGING__;{/php}
+<nav class="tv-paging" aria-label="分页">
+  {if condition="$tv_pg['page_current'] gt 1"}<a class="tv-paging__btn" href="{:mac_url_page($tv_pg['page_url'], $tv_pg['page_prev'])}"><svg class="tv-ico"><use href="#i-left"/></svg><span>上一页</span></a>{else/}<span class="tv-paging__btn is-disabled"><svg class="tv-ico"><use href="#i-left"/></svg><span>上一页</span></span>{/if}
+  {if condition="$tv_pg['page_num_min'] gt 1"}<a class="tv-paging__num" href="{:mac_url_page($tv_pg['page_url'], 1)}">1</a>{if condition="$tv_pg['page_num_min'] gt 2"}<span class="tv-paging__dot">…</span>{/if}{/if}
+  {volist name="tv_pg.page_num" id="pn"}
+  {if condition="$pn eq $tv_pg['page_current']"}<span class="tv-paging__num is-active">{$pn}</span>{else/}<a class="tv-paging__num" href="{:mac_url_page($tv_pg['page_url'], $pn)}">{$pn}</a>{/if}
+  {/volist}
+  {if condition="$tv_pg['page_num_max'] lt $tv_pg['page_total']"}{if condition="$tv_pg['page_num_max'] lt $tv_pg['page_total'] - 1"}<span class="tv-paging__dot">…</span>{/if}<a class="tv-paging__num" href="{:mac_url_page($tv_pg['page_url'], $tv_pg['page_total'])}">{$tv_pg.page_total}</a>{/if}
+  {if condition="$tv_pg['page_current'] lt $tv_pg['page_total']"}<a class="tv-paging__btn" href="{:mac_url_page($tv_pg['page_url'], $tv_pg['page_next'])}"><span>下一页</span><svg class="tv-ico"><use href="#i-right"/></svg></a>{else/}<span class="tv-paging__btn is-disabled"><span>下一页</span><svg class="tv-ico"><use href="#i-right"/></svg></span>{/if}
+</nav>
+{/if}

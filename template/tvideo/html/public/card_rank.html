@@ -1,0 +1,10 @@
+{php}$tv_rk = isset($tv_rank_n) ? (int)$tv_rank_n : 0;{/php}
+<a class="tv-rank__item" href="{:mac_url_vod_detail($vo)}" title="{$vo.vod_name}">
+  <span class="tv-rank__no{if condition="$tv_rk elt 3"} is-top is-top{$tv_rk}{/if}">{$tv_rk}</span>
+  <span class="tv-rank__pic"><img src="{:mac_url_img($vo['vod_pic'])}" alt="" loading="lazy" decoding="async" data-ph="v"></span>
+  <span class="tv-rank__body">
+    <span class="tv-rank__title">{$vo.vod_name}</span>
+    <span class="tv-rank__sub">{:mac_default($vo['vod_remarks'], $vo['vod_class'])}</span>
+  </span>
+  <span class="tv-rank__heat">{:tv_heat($vo[$tv_rank_by])}</span>
+</a>

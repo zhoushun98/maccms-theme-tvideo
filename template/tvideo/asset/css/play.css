@@ -1,0 +1,245 @@
+/* TVideo · 详情页 / 播放页 / 下载页 */
+
+/* ---------- 详情页 ---------- */
+
+.tv-detail {
+  position: relative;
+  margin: 0 calc(-1 * var(--gut)) 8px calc(-1 * (var(--sb) + var(--gut)));
+  padding: calc(var(--top) + 40px) var(--gut) 48px calc(var(--sb) + var(--gut));
+  overflow: hidden;
+  isolation: isolate;
+}
+.tv-detail__bg { position: absolute; inset: 0; z-index: -1; }
+.tv-detail__bg img { width: 100%; height: 100%; object-fit: cover; filter: blur(40px) saturate(1.2) brightness(.5); transform: scale(1.2); }
+.tv-detail__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(20, 20, 20, .95) 0, rgba(20, 20, 20, .55) 60%, rgba(20, 20, 20, .8)), linear-gradient(0deg, #141414 0, rgba(20, 20, 20, 0) 50%);
+}
+.tv-detail__inner { display: flex; gap: 40px; max-width: 1400px; }
+.tv-detail__poster { position: relative; flex: none; width: 240px; aspect-ratio: 5 / 7; border-radius: 12px; overflow: hidden; background: var(--card); box-shadow: 0 20px 48px rgba(0, 0, 0, .5); }
+.tv-detail__poster img { width: 100%; height: 100%; object-fit: cover; }
+.tv-detail__poster .tv-badge { font-size: 13px; padding: 3px 10px; }
+.tv-detail__info { flex: 1; min-width: 0; padding-top: 4px; }
+.tv-detail__title { font-size: 36px; line-height: 1.25; font-weight: 700; letter-spacing: .5px; }
+.tv-detail__sub { margin-top: 6px; font-size: 14px; color: var(--t3); }
+.tv-detail__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin-top: 14px; font-size: 14px; color: rgba(255, 255, 255, .75); }
+.tv-detail__meta a:hover { color: var(--accent); }
+.tv-detail__score { font-size: 26px; line-height: 1; }
+.tv-detail__score small { font-size: 13px; margin-left: 2px; font-weight: 400; }
+.tv-detail__remarks { color: var(--accent); }
+.tv-detail__tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.tv-detail__people { margin-top: 16px; font-size: 14px; line-height: 24px; }
+.tv-detail__people > div { display: flex; gap: 12px; }
+.tv-detail__people dt { flex: none; color: var(--t3); }
+.tv-detail__people dd { display: flex; flex-wrap: wrap; gap: 0 14px; }
+.tv-detail__people a { color: var(--t1); }
+.tv-detail__people a:hover { color: var(--accent); }
+.tv-detail__desc { margin-top: 14px; max-width: 860px; }
+.tv-detail__desc-text { font-size: 14px; line-height: 24px; color: var(--t2); max-height: 72px; overflow: hidden; }
+.tv-detail__desc-text p { margin: 0 0 6px; }
+.tv-detail__desc.is-open .tv-detail__desc-text { max-height: none; }
+.tv-detail__desc-btn, .tv-side-desc__btn { display: inline-flex; align-items: center; gap: 2px; margin-top: 6px; font-size: 13px; color: var(--accent); }
+.tv-detail__desc.is-open .tv-detail__desc-btn .tv-ico, .tv-side-desc.is-open .tv-side-desc__btn .tv-ico { transform: rotate(90deg); }
+.tv-detail__acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.tv-btn--lg { height: 48px; padding: 0 26px; border-radius: 24px; font-size: 16px; }
+.tv-btn--lg .tv-ico { width: 20px; height: 20px; }
+.tv-btn.is-on .tv-ico, .tv-play__btn.is-on .tv-ico { color: #ff4d6d; }
+.tv-sec__note { font-size: 13px; color: var(--t3); }
+
+/* ---------- 选集组件 ---------- */
+
+.tv-eps__lines { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.tv-eps__line { height: 32px; padding: 0 14px; border-radius: 16px; font-size: 13px; color: var(--t2); background: rgba(255, 255, 255, .06); transition: color .2s, background-color .2s; }
+.tv-eps__line em { font-style: normal; margin-left: 4px; font-family: var(--num); opacity: .7; }
+.tv-eps__line:hover { color: var(--t1); }
+.tv-eps__line.is-active { color: var(--accent); background: var(--accent-weak); }
+.tv-eps__groups { display: flex; gap: 6px; margin-bottom: 12px; white-space: nowrap; }
+.tv-eps__group { flex: none; padding: 6px 14px; border-radius: 13.5px; font-size: 12px; line-height: 15px; font-family: var(--num); color: var(--t2); background: rgba(255, 255, 255, .06); transition: color .2s, background-color .2s; }
+.tv-eps__group:hover { color: var(--t1); }
+.tv-eps__group.is-active { color: var(--accent); background: var(--accent-weak); }
+.tv-eps__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); gap: 8px; }
+.tv-eps__list.is-wide { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.tv-eps__item {
+  position: relative;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font: 700 16px/1 var(--num);
+  color: var(--t1);
+  background: rgba(242, 242, 242, .1);
+  transition: background-color .2s, color .2s;
+  overflow: hidden;
+}
+.tv-eps__list.is-wide .tv-eps__item { justify-content: flex-start; padding: 0 14px; font: 500 14px/1.3 var(--font); white-space: nowrap; text-overflow: ellipsis; }
+.tv-eps__item:hover { background: rgba(242, 242, 242, .2); }
+.tv-eps__item.is-cur { color: var(--accent); background: var(--accent-weak); box-shadow: inset 0 0 0 1px rgba(0, 209, 209, .5); }
+.tv-eps__wave { position: absolute; right: 4px; bottom: 4px; display: flex; align-items: flex-end; gap: 1px; height: 9px; }
+.tv-eps__wave b { width: 2px; background: var(--accent); animation: tv-wave 1s ease-in-out infinite; }
+.tv-eps__wave b:nth-child(2) { animation-delay: .2s; }
+.tv-eps__wave b:nth-child(3) { animation-delay: .4s; }
+@keyframes tv-wave { 0%, 100% { height: 3px; } 50% { height: 9px; } }
+.tv-eps__none { color: var(--t3); font-size: 14px; padding: 20px 0; }
+.tv-detail__eps .tv-eps__list:not(.is-wide) { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); max-width: 1100px; }
+.tv-detail__eps .tv-eps__list.is-wide { max-width: 1100px; }
+
+/* ---------- 播放页 ---------- */
+
+.tv-page-play .tv-main { padding-top: calc(var(--top) + 16px); }
+.tv-play { display: flex; gap: 24px; align-items: flex-start; max-width: 2048px; margin: 0 auto; padding: 0 calc(60px - var(--gut)); }
+.tv-play__main { flex: 1; min-width: 0; }
+.tv-player { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 8px; overflow: hidden; }
+.tv-player > .MacPlayer, .tv-player .MacPlayer { position: absolute !important; inset: 0; width: 100% !important; height: 100% !important; min-height: 0 !important; z-index: 1 !important; }
+.tv-player iframe { display: block; border: 0; }
+.tv-player__back { display: none; }
+/* 主题加载层：盖住 player.js 的预加载页与 DPlayer 初始化过程，收到 play_ok / play_fail 后淡出；不拦截点击 */
+.tv-player #buffer, .tv-player #install { display: none !important; }
+.tv-player__loading { position: absolute; z-index: 4; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; overflow: hidden; background: #000; color: var(--t2); font-size: 13px; pointer-events: none; transition: opacity .35s, visibility .35s; }
+.tv-player__loading::before { content: ""; position: absolute; inset: -40px; z-index: -1; background: var(--tv-poster) center / cover no-repeat; filter: blur(28px) brightness(.35) saturate(1.2); }
+.tv-player.is-ready .tv-player__loading { opacity: 0; visibility: hidden; }
+.tv-player.is-fail .tv-player__loading { color: var(--t1); }
+.tv-player.is-fail .tv-spin { display: none; }
+.tv-spin { width: 40px; height: 40px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .14); border-top-color: var(--accent); animation: tv-spin .8s linear infinite; }
+@keyframes tv-spin { to { transform: rotate(360deg); } }
+.tv-player.is-webfs { position: fixed; z-index: 1000; inset: 0; width: 100vw; height: 100vh; aspect-ratio: auto; border-radius: 0; }
+.tv-play__bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 2px 4px; }
+.tv-play__title { min-width: 0; font-size: 22px; line-height: 30px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tv-play__title a:hover { color: var(--accent); }
+.tv-play__title span { margin-left: 12px; font-size: 16px; font-weight: 400; color: var(--t2); }
+.tv-play__ctrl { display: flex; gap: 4px; flex: none; }
+.tv-play__btn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 18px; font-size: 14px; color: var(--t2); transition: color .2s, background-color .2s; }
+.tv-play__btn .tv-ico { width: 18px; height: 18px; }
+.tv-play__btn:hover { color: var(--t1); background: rgba(255, 255, 255, .08); }
+.tv-play__side {
+  flex: none;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background: var(--panel);
+  overflow: hidden;
+}
+.tv-side-info { display: flex; gap: 12px; padding: 16px 16px 0; }
+.tv-side-info__pic { flex: none; width: 65px; height: 91px; border-radius: 4px; overflow: hidden; background: var(--card); }
+.tv-side-info__pic img { width: 100%; height: 100%; object-fit: cover; }
+.tv-side-info__body { min-width: 0; }
+.tv-side-info__title { font-size: 18px; line-height: 24px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tv-side-info__title a:hover { color: var(--accent); }
+.tv-side-info__meta { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 6px; font-size: 13px; color: rgba(255, 255, 255, .7); }
+.tv-side-info__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tv-side-info__tags span { padding: 2px 10px; border-radius: 30px; font-size: 12px; line-height: 18px; color: var(--t2); background: rgba(255, 255, 255, .047); }
+.tv-side-desc { padding: 10px 16px 0; }
+.tv-side-desc__text { font-size: 13px; line-height: 21px; color: var(--t3); max-height: 42px; overflow: hidden; }
+.tv-side-desc__text p { margin: 0 0 4px; }
+.tv-side-desc.is-open .tv-side-desc__text { max-height: 240px; overflow-y: auto; }
+.tv-side-eps { flex: 1; min-height: 0; display: flex; flex-direction: column; margin: 14px 16px 16px; padding: 14px 14px 4px; border-radius: 12px; background: rgba(255, 255, 255, .08); }
+.tv-side-eps__hd { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+.tv-side-eps__hd strong { font-size: 16px; font-weight: 500; }
+.tv-side-eps__hd span { font-size: 12px; color: var(--t3); }
+.tv-side-eps .tv-eps { flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, .2) transparent; }
+.tv-side-eps .tv-eps::-webkit-scrollbar { width: 6px; }
+.tv-side-eps .tv-eps::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .2); border-radius: 3px; }
+.tv-side-eps .tv-eps__list:not(.is-wide) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.tv-side-eps .tv-eps__list.is-wide { grid-template-columns: 1fr; }
+.tv-side-eps .tv-eps__item { height: auto; aspect-ratio: 1 / 1; }
+.tv-side-eps .tv-eps__list.is-wide .tv-eps__item { aspect-ratio: auto; height: 44px; }
+.tv-play__more { max-width: 2048px; margin-left: auto; margin-right: auto; padding: 0 calc(60px - var(--gut)); }
+
+.tv-lock { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 20px; text-align: center; background: radial-gradient(circle at 50% 40%, #2a2a2a, #0d0d0d 70%); }
+.tv-lock__ico { width: 48px; height: 48px; color: var(--vip); }
+.tv-lock__msg { font-size: 18px; font-weight: 500; }
+.tv-lock__sub { font-size: 14px; color: var(--t2); }
+.tv-lock__acts { display: flex; gap: 12px; margin-top: 6px; }
+.tv-lock__form { display: flex; gap: 10px; width: min(360px, 90%); }
+.tv-lock__link { font-size: 13px; color: var(--accent); }
+
+/* 播放器 iframe 子页 */
+.tv-player-page { margin: 0; min-height: 0; height: 100vh; overflow: hidden; background: #000; }
+.tv-player-page .tv-player--frame { height: 100vh; aspect-ratio: auto; border-radius: 0; }
+.tv-player-page > .tv-lock { position: fixed; }
+
+/* ---------- 下载页 ---------- */
+
+.tv-alert { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; padding: 12px 16px; border-radius: 10px; background: rgba(255, 223, 137, .1); color: var(--vip); font-size: 14px; }
+.tv-alert .tv-ico { width: 18px; height: 18px; }
+.tv-down__list { display: flex; flex-direction: column; gap: 8px; }
+.tv-down__item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 10px; background: rgba(255, 255, 255, .05); }
+.tv-down__name { flex: none; min-width: 72px; font-weight: 500; }
+.tv-down__url { flex: 1; min-width: 0; height: 34px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--line); background: rgba(0, 0, 0, .25); color: var(--t2); font-size: 13px; outline: 0; }
+.tv-down__url.is-locked { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; color: var(--t3); }
+
+/* ---------- 平板 ---------- */
+
+@media (max-width: 1279px) {
+  .tv-play { padding: 0; }
+  .tv-play__more { padding: 0; }
+  .tv-play__side { width: 320px; }
+}
+@media (max-width: 1023px) {
+  .tv-play { flex-direction: column; }
+  .tv-play__side { width: 100%; height: auto !important; }
+  .tv-side-eps .tv-eps { max-height: 360px; }
+  .tv-side-eps .tv-eps__list:not(.is-wide) { grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); }
+  .tv-side-eps .tv-eps__list.is-wide { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .tv-detail__poster { width: 200px; }
+  .tv-detail__title { font-size: 30px; }
+}
+
+/* ---------- H5 ---------- */
+
+@media (max-width: 767px) {
+  .tv-detail { margin: -8px calc(-1 * var(--gut)) 0; padding: 20px var(--gut) 20px; }
+  .tv-detail__inner { display: grid; grid-template-columns: 112px minmax(0, 1fr); grid-template-areas: "poster head" "acts acts" "desc desc"; gap: 16px 14px; align-items: start; }
+  .tv-detail__poster { grid-area: poster; width: 112px; border-radius: 8px; }
+  .tv-detail__info { display: contents; }
+  .tv-detail__head { grid-area: head; min-width: 0; }
+  .tv-detail__title { font-size: 20px; line-height: 28px; }
+  .tv-detail__meta { gap: 4px 10px; margin-top: 6px; font-size: 12px; }
+  .tv-detail__score { font-size: 20px; }
+  .tv-detail__tags { display: none; }
+  .tv-detail__people { margin-top: 8px; font-size: 12px; line-height: 20px; }
+  .tv-detail__people dd { max-height: 40px; overflow: hidden; }
+  .tv-detail__desc { grid-area: desc; margin-top: 0; }
+  .tv-detail__acts { grid-area: acts; margin-top: 0; gap: 8px; }
+  .tv-detail__acts .tv-btn--lg { flex: 1 1 0; min-width: 0; height: 40px; padding: 0 10px; font-size: 14px; }
+  .tv-detail__acts .tv-btn--primary { flex-basis: 100%; height: 44px; font-size: 15px; }
+  .tv-detail__eps .tv-eps__list:not(.is-wide), .tv-detail__eps .tv-eps__list.is-wide,
+  .tv-side-eps .tv-eps__list:not(.is-wide), .tv-side-eps .tv-eps__list.is-wide {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: 51px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .tv-detail__eps .tv-eps__list.is-wide, .tv-side-eps .tv-eps__list.is-wide { grid-auto-columns: 140px; }
+  .tv-eps__list::-webkit-scrollbar { display: none; }
+  .tv-eps__item, .tv-side-eps .tv-eps__item { width: 51px; height: 51px; aspect-ratio: auto; font-size: 18px; }
+  .tv-eps__list.is-wide .tv-eps__item, .tv-side-eps .tv-eps__list.is-wide .tv-eps__item { width: 140px; height: 51px; font-size: 13px; white-space: normal; }
+
+  .tv-page-play .tv-main { padding-top: 0; }
+  .tv-page-play .tv-top { display: none; }
+  .tv-play { gap: 0; }
+  .tv-play__main { width: 100%; }
+  .tv-player { position: sticky; z-index: 30; top: 0; margin: 0 calc(-1 * var(--gut)); width: calc(100% + 2 * var(--gut)); border-radius: 0; }
+  .tv-player__back { position: absolute; z-index: 5; top: calc(8px + env(safe-area-inset-top)); left: 8px; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(0, 0, 0, .45); color: #fff; }
+  .tv-player__back .tv-ico { width: 20px; height: 20px; }
+  .tv-player.is-webfs .tv-player__back { display: none; }
+  .tv-play__bar { flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 0 0; }
+  .tv-play__title { font-size: 18px; line-height: 26px; white-space: normal; }
+  .tv-play__title span { display: block; margin: 2px 0 0; font-size: 13px; }
+  .tv-play__ctrl { justify-content: space-between; }
+  .tv-play__btn { flex-direction: column; gap: 2px; height: auto; padding: 4px 6px; font-size: 11px; border-radius: 8px; }
+  .tv-play__btn .tv-ico { width: 22px; height: 22px; }
+  .tv-play__side { margin-top: 12px; background: transparent; border-radius: 0; }
+  .tv-side-info { display: none; }
+  .tv-side-desc { padding: 0; }
+  .tv-side-eps { margin: 12px 0 0; padding: 0; background: transparent; }
+  .tv-side-eps .tv-eps { max-height: none; overflow: visible; }
+  .tv-down__item { flex-wrap: wrap; }
+  .tv-down__url { flex-basis: 100%; order: 3; }
+}

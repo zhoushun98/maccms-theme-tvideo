@@ -1,0 +1,22 @@
+{extend name="public/base" /}
+{block name="title"}页面不存在 - {$maccms.site_name}{/block}
+{block name="head"}<meta name="robots" content="noindex,follow">{/block}
+{block name="main"}
+<section class="tv-notice">
+  <div class="tv-code">404</div>
+  <h1 class="tv-notice__title">{php}echo isset($msg) && $msg !== '' ? strip_tags((string)$msg) : '页面不存在或已被删除';{/php}</h1>
+  <p class="tv-notice__desc">你要找的内容可能已下架，看看其他精彩影片吧</p>
+  <div class="tv-notice__acts">
+    <a class="tv-btn tv-btn--primary" href="{$maccms.path}">返回首页</a>
+    <a class="tv-btn" href="{:mac_url('label/rank')}">看看排行榜</a>
+  </div>
+</section>
+<section class="tv-sec">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">热播推荐</h2></header>
+  <div class="tv-rail tv-rail--v" data-tv-rail><div class="tv-rail__track">
+    {maccms:vod num="14" order="desc" by="hits_week" id="vo" key="rk"}
+    {include file="public/card_v" /}
+    {/maccms:vod}
+  </div></div>
+</section>
+{/block}

@@ -1,0 +1,14 @@
+{extend name="public/sys" /}
+{block name="title"}{if condition="$code eq 1"}操作成功{else/}提示{/if}{/block}
+{block name="main"}
+<div class="tv-sys__ico{if condition="$code eq 1"} is-ok{/if}">{if condition="$code eq 1"}✓{else/}!{/if}</div>
+<h1 class="tv-sys__title">{php}echo strip_tags((string)$msg);{/php}</h1>
+<p class="tv-sys__desc"><b id="tv-wait">{$wait|default=3}</b> 秒后自动跳转</p>
+<div class="tv-notice__acts">
+  <a class="tv-btn tv-btn--primary" id="tv-href" href="{php}echo htmlspecialchars((string)$url);{/php}">立即跳转</a>
+  <a class="tv-btn" href="{:MAC_PATH}">返回首页</a>
+</div>
+<script>
+(function (w, a) { var n = parseInt(w.textContent, 10) || 3; var u = a.getAttribute('href'); var t = setInterval(function () { n -= 1; w.textContent = n; if (n <= 0) { clearInterval(t); if (u) { location.href = u; } } }, 1000); })(document.getElementById('tv-wait'), document.getElementById('tv-href'));
+</script>
+{/block}

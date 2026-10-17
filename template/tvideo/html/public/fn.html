@@ -1,0 +1,26 @@
+{php}
+// 主题公共函数；comment/ajax、gbook/ajax 作为片段单独加载，不经过 head，需各自 include 本文件
+if (!function_exists('tv_heat')) {
+    function tv_heat($n) {
+        $n = (int)$n;
+        if ($n >= 100000000) { return round($n / 100000000, 1) . '亿'; }
+        if ($n >= 10000) { return round($n / 10000, 1) . '万'; }
+        return (string)$n;
+    }
+}
+// 相对时间：替代 mac_friend_date（其跨天判断有误，凌晨会把当天时间显示成“昨天”）
+if (!function_exists('tv_ago')) {
+    function tv_ago($t) {
+        $t = (int)$t;
+        if ($t <= 0) { return ''; }
+        $d = time() - $t;
+        if ($d < 60) { return '刚刚'; }
+        if ($d < 3600) { return floor($d / 60) . '分钟前'; }
+        $today = strtotime('today');
+        if ($t >= $today) { return floor($d / 3600) . '小时前'; }
+        if ($t >= $today - 86400) { return '昨天 ' . date('H:i', $t); }
+        if (date('Y', $t) === date('Y')) { return date('m-d', $t); }
+        return date('Y-m-d', $t);
+    }
+}
+{/php}

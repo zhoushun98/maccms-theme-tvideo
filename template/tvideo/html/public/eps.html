@@ -1,0 +1,53 @@
+{php}
+/* 线路 + 选集（详情页、播放页共用）；每 30 集一组 */
+$tv_lines = !empty($obj['vod_play_list']) && is_array($obj['vod_play_list']) ? $obj['vod_play_list'] : [];
+$tv_cur_sid = isset($param['sid']) ? (int)$param['sid'] : 0;
+$tv_cur_nid = isset($param['nid']) ? (int)$param['nid'] : 0;
+$tv_line_keys = array_keys($tv_lines);
+$tv_active_sid = ($tv_cur_sid > 0 && isset($tv_lines[$tv_cur_sid])) ? $tv_cur_sid : (int)reset($tv_line_keys);
+$tv_line_no = 0;
+foreach ($tv_lines as $tv_lk => $tv_lv) {
+    $tv_line_no++;
+    $tv_wide = false;
+    foreach ($tv_lv['urls'] as $tv_ep) {
+        if (!preg_match('/^(第\s*)?0*\d{1,4}\s*(集|话|話|期)?$/u', trim((string)$tv_ep['name']))) {
+            $tv_wide = true;
+            break;
+        }
+    }
+    $tv_lines[$tv_lk]['tv_label'] = '线路' . $tv_line_no;
+    $tv_lines[$tv_lk]['tv_wide'] = $tv_wide;
+    $tv_lines[$tv_lk]['tv_groups'] = (int)ceil(max(1, (int)$tv_lv['url_count']) / 30);
+    $tv_lines[$tv_lk]['tv_cg'] = ($tv_lk == $tv_cur_sid && $tv_cur_nid > 0) ? (int)ceil($tv_cur_nid / 30) : 1;
+}
+{/php}
+{if condition="!empty($tv_lines)"}
+<div class="tv-eps" data-tv-eps>
+  {if condition="count($tv_lines) gt 1"}
+  <div class="tv-eps__lines" role="tablist">
+    {foreach name="tv_lines" item="pl"}
+    <button class="tv-eps__line{if condition="$pl.sid eq $tv_active_sid"} is-active{/if}" type="button" data-line="{$pl.sid}" title="{$pl.player_info.show|default=''}">{$pl.tv_label}<em>{$pl.url_count}</em></button>
+    {/foreach}
+  </div>
+  {/if}
+  {foreach name="tv_lines" item="pl"}
+  <div class="tv-eps__panel" data-line-panel="{$pl.sid}"{if condition="$pl.sid neq $tv_active_sid"} hidden{/if}>
+    {if condition="$pl.tv_groups gt 1"}
+    <div class="tv-eps__groups tv-scroll-x">
+      {for start="1" end="$pl.tv_groups" comparison="elt" name="g"}
+      <button class="tv-eps__group{if condition="$g eq $pl.tv_cg"} is-active{/if}" type="button" data-group="{$g}">{php}echo ($g * 30 - 29) . '-' . min($g * 30, (int)$pl['url_count']);{/php}</button>
+      {/for}
+    </div>
+    {/if}
+    <div class="tv-eps__list{if condition="$pl.tv_wide"} is-wide{/if}">
+      {foreach name="pl.urls" item="ep"}
+      {php}$tv_ep_g = (int)ceil($ep['nid'] / 30); $tv_ep_cur = ($pl['sid'] == $tv_cur_sid && $ep['nid'] == $tv_cur_nid);{/php}
+      <a class="tv-eps__item{if condition="$tv_ep_cur"} is-cur{/if}" data-group="{$tv_ep_g}" href="{:mac_url_vod_play($obj, ['sid' => $pl['sid'], 'nid' => $ep['nid']])}" title="{$ep.name}"{if condition="$tv_ep_g neq $pl.tv_cg"} hidden{/if}>{if condition="$pl.tv_wide"}{$ep.name}{else/}{$ep.nid}{/if}{if condition="$tv_ep_cur"}<i class="tv-eps__wave"><b></b><b></b><b></b></i>{/if}</a>
+      {/foreach}
+    </div>
+  </div>
+  {/foreach}
+</div>
+{else/}
+<p class="tv-eps__none">暂无播放地址</p>
+{/if}

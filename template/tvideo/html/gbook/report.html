@@ -1,0 +1,10 @@
+<form class="gbook_form tv-cmt__form tv-report" action="javascript:;" onsubmit="return false" data-login="{$gbook.login}" data-verify="{$gbook.verify}">
+  <textarea class="gbook_content tv-input" name="gbook_content" maxlength="200">【{$param.name}】播放报错：</textarea>
+  <div class="tv-cmt__bar">
+    {if condition="$gbook.verify eq 1"}
+    <input class="tv-input tv-cmt__verify" type="text" name="verify" placeholder="验证码" autocomplete="off" maxlength="6">
+    <img class="mac_verify_img" src="{:mac_url('verify/index')}" alt="验证码" title="看不清？点击刷新">
+    {/if}
+    <button class="tv-btn tv-btn--primary tv-btn--sm gbook_submit" type="button">提交</button>
+  </div>
+</form>

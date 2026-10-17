@@ -1,0 +1,8 @@
+{extend name="public/sys" /}
+{block name="title"}网络已断开{/block}
+{block name="main"}
+<div class="tv-sys__ico">!</div>
+<h1 class="tv-sys__title">网络已断开</h1>
+<p class="tv-sys__desc">请检查网络连接后重试</p>
+<div class="tv-notice__acts"><button class="tv-btn tv-btn--primary" type="button" onclick="location.reload()">重新加载</button></div>
+{/block}

@@ -1,0 +1,20 @@
+<aside class="tv-side" aria-label="频道导航">
+  <a class="tv-logo" href="{$maccms.path}" title="{$maccms.site_name}">
+    <svg class="tv-logo__mark"><use href="#i-logo"/></svg><span class="tv-logo__text">{$tv_brand}</span>
+  </a>
+  <nav class="tv-nav">
+    <a class="tv-nav__item{if condition="$tv_aid eq 1"} is-active{/if}" href="{$maccms.path}"><svg class="tv-ico"><use href="#i-home"/></svg><span>首页</span></a>
+    {php}$tv_icons = ['lianxuju' => 'tv', 'dianshiju' => 'tv', 'dianying' => 'film', 'zongyi' => 'mic', 'dongman' => 'anime', 'duanju' => 'short', 'jilupian' => 'doc', 'lunlipian' => 'heart']; $tv_nav_types = [];{/php}
+    {maccms:type ids="parent" mid="1" order="asc" by="sort" num="10" id="navt" key="navk"}
+    {php}$tv_nav_types[] = $navt; $tv_ico = isset($tv_icons[$navt['type_en']]) ? $tv_icons[$navt['type_en']] : 'grid';{/php}
+    <a class="tv-nav__item{if condition="$tv_root eq $navt.type_id"} is-active{/if}" href="{:mac_url_type($navt)}"><svg class="tv-ico"><use href="#i-{$tv_ico}"/></svg><span>{$navt.type_name}</span></a>
+    {/maccms:type}
+    <a class="tv-nav__item{if condition="$tv_aid eq 7"} is-active{/if}" href="{:mac_url('label/rank')}"><svg class="tv-ico"><use href="#i-rank"/></svg><span>排行榜</span></a>
+    {if condition="!empty($tv_nav_types)"}
+    <a class="tv-nav__item{if condition="$tv_aid eq 12"} is-active{/if}" href="{:mac_url_type($tv_nav_types[0],[],'show')}"><svg class="tv-ico"><use href="#i-filter"/></svg><span>片库</span></a>
+    {/if}
+    <i class="tv-nav__sep"></i>
+    <a class="tv-nav__item{if condition="$tv_aid eq 6"} is-active{/if}" href="{:mac_url('user/index')}"><svg class="tv-ico"><use href="#i-user"/></svg><span>个人中心</span></a>
+    <a class="tv-nav__item{if condition="$tv_aid eq 4"} is-active{/if}" href="{:mac_url('gbook/index')}"><svg class="tv-ico"><use href="#i-msg"/></svg><span>留言反馈</span></a>
+  </nav>
+</aside>

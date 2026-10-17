@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="robots" content="noindex,nofollow">
+<title>请输入播放密码</title>
+<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/play.css">
+{include file="public/jsvar" /}
+<script src="{$maccms.path}static_new/js/jquery.js"></script>
+<script src="{$maccms.path}static_new/js/home.js"></script>
+</head>
+<body class="tv-player-page">
+<span class="mac_user" hidden></span>
+<div class="tv-lock">
+  <p class="tv-lock__msg">该影片需要密码才能播放</p>
+  <form class="tv-lock__form" action="javascript:;" onsubmit="return false">
+    <input class="tv-input" type="password" name="pwd" placeholder="请输入播放密码" autocomplete="off">
+    <button class="tv-btn tv-btn--primary" type="button" onclick="MAC.Pwd.Check(this)" data-mid="1" data-id="{$obj.vod_id}" data-type="4">确认</button>
+  </form>
+  {if condition="$obj.vod_pwd_play_url neq ''"}<a class="tv-lock__link" href="{$obj.vod_pwd_play_url}" target="_blank" rel="noopener">点击获取密码</a>{/if}
+</div>
+</body>
+</html>

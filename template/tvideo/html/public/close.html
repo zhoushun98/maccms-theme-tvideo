@@ -1,0 +1,7 @@
+{extend name="public/sys" /}
+{block name="title"}网站维护中{/block}
+{block name="main"}
+<div class="tv-sys__ico">!</div>
+<h1 class="tv-sys__title">网站正在维护中</h1>
+<p class="tv-sys__desc">{php}echo isset($close_tip) ? strip_tags((string)$close_tip) : '请稍后再来';{/php}</p>
+{/block}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="robots" content="noindex,nofollow">
+<title>{$obj.vod_name} - 播放器</title>
+{php}$tv_tpl_dir = ROOT_PATH . substr(MAC_PATH_TEMPLATE, strlen(MAC_PATH)); $tv_v = substr(md5(@filemtime($tv_tpl_dir . 'asset/css/play.css') . '|' . @filemtime($tv_tpl_dir . 'asset/js/player-guard.js')), 0, 8);{/php}
+<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/play.css?v={$tv_v}">
+{include file="public/jsvar" /}
+<script src="{$maccms.path}static_new/js/jquery.js"></script>
+<script src="{$maccms.path}static_new/js/home.js"></script>
+<script src="{$maccms.path_tpl}asset/js/player-guard.js?v={$tv_v}"></script>
+</head>
+<body class="tv-player-page">
+<span class="mac_user" hidden></span>
+<div class="tv-player tv-player--frame">
+{$player_data}{$player_js}
+</div>
+{if condition="$popedom.code gt 1 && $popedom.trysee gt 0"}
+<template id="tv-trysee-end">
+  <div class="tv-lock">
+    <p class="tv-lock__msg">试看 {$popedom.trysee} 分钟已结束</p>
+    {if condition="$obj.vod_points_play gt 0"}
+    <p class="tv-lock__sub">完整观看需要 {$obj.vod_points_play} 积分，一次购买永久观看</p>
+    <div class="tv-lock__acts">
+      {if condition="$user.user_id gt 0"}<button class="tv-btn tv-btn--vip" type="button" onclick="MAC.User.BuyPopedom(this)" data-id="{$obj.vod_id}" data-mid="1" data-sid="{$param.sid}" data-nid="{$param.nid}" data-type="4">确认购买</button>{else/}<a class="tv-btn tv-btn--primary" href="{:mac_url('user/login')}" target="_top">登录后购买</a>{/if}
+    </div>
+    {else/}
+    <p class="tv-lock__sub">完整观看需要升级会员</p>
+    <div class="tv-lock__acts"><a class="tv-btn tv-btn--vip" href="{:mac_url('user/index')}" target="_top">会员中心</a></div>
+    {/if}
+  </div>
+</template>
+<script src="{$maccms.path_tpl}asset/js/trysee.js?v={$tv_v}" data-trysee="{$popedom.trysee}"></script>
+{/if}
+</body>
+</html>

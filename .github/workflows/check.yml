@@ -1,0 +1,44 @@
+name: 检查
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: JS 语法
+        run: |
+          for f in template/tvideo/asset/js/*.js template/tvideo/asset/pwa/*.js qa/*.mjs; do
+            node --check "$f"
+          done
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          tools: none
+
+      - name: PHP 语法（PHP 7.4）
+        run: php -l tools/patch-dplayer.php
+
+      - name: 模板约束
+        run: |
+          # {php} 块里出现 {$ 会被模板引擎提前替换
+          if perl -0ne 'while (/\{php\}(.*?)\{\/php\}/gs) { if ($1 =~ /\{\$/) { print "$ARGV\n"; exit 1 } }' $(find template/tvideo/html -name '*.html'); then :; else
+            echo "::error::上面的模板在 {php} 块里出现了 {\$"; exit 1
+          fi
+          # 资源路径要用 {$maccms.path_tpl}，不能写死主题目录
+          if grep -rnE "['\"(]/?template/(tvideo|default)/" template/tvideo/html; then
+            echo "::error::模板里写死了主题目录"; exit 1
+          fi

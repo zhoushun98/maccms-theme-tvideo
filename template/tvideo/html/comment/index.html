@@ -1,0 +1,7 @@
+{extend name="public/base" /}
+{block name="title"}评论 - {$maccms.site_name}{/block}
+{block name="head"}<meta name="robots" content="noindex,follow">{/block}
+{block name="main"}
+<header class="tv-page-hd"><h1>评论</h1></header>
+<div class="mac_comment tv-cmt" data-mid="{$param.mid|default=1}" data-id="{$param.rid|default=0}" data-login="{$comment.login}" data-verify="{$comment.verify}"><div class="tv-skel tv-skel--cmt"></div></div>
+{/block}

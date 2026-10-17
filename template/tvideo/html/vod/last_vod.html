@@ -1,0 +1,12 @@
+{extend name="public/base" /}
+{block name="title"}最近更新 - {$maccms.site_name}{/block}
+{block name="main"}
+<header class="tv-page-hd"><h1>最近更新</h1><p>全站最新上架与更新的影片</p></header>
+<div class="tv-grid tv-grid--v">
+  {maccms:vod num="42" paging="yes" pageurl="vod/last_vod" order="desc" by="time" id="vo" key="lk"}
+  {include file="public/card_v" /}
+  {/maccms:vod}
+</div>
+{if condition="empty($__PAGING__['record_total'])"}{include file="public/empty" /}{/if}
+{include file="public/paging" /}
+{/block}

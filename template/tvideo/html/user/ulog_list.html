@@ -1,0 +1,23 @@
+<div class="tv-uc-toolbar">
+  <span>共 <b class="tv-num">{$__PAGING__.record_total|default=0}</b> 条</span>
+  {if condition="!empty($list)"}<button class="tv-btn tv-btn--sm" type="button" data-tv-ulog-clear data-type="{$tv_ulog_type}"><svg class="tv-ico"><use href="#i-trash"/></svg>清空</button>{/if}
+</div>
+{if condition="!empty($list)"}
+<div class="tv-grid tv-grid--{$tv_ulog_card}">
+  {volist name="list" id="ul"}
+  {if condition="!empty($ul['data'])"}
+  <div class="tv-card tv-card--{$tv_ulog_card} tv-uc-item">
+    <a href="{$ul.data.link}">
+      <div class="tv-card__pic"><img src="{$ul.data.pic}" alt="{$ul.data.name}" loading="lazy" data-ph="{$tv_ulog_card}">{if condition="$ul.ulog_nid gt 0 && $tv_ulog_type neq 2"}<span class="tv-card__note">第{$ul.ulog_nid}集</span>{/if}</div>
+      <p class="tv-card__title">{$ul.data.name}</p>
+      <p class="tv-card__sub">{$ul.data.type.type_name} · {:tv_ago($ul['ulog_time'])}</p>
+    </a>
+    <button class="tv-uc-item__del" type="button" data-tv-ulog-del="{$ul.ulog_id}" data-type="{$tv_ulog_type}" aria-label="删除"><svg class="tv-ico"><use href="#i-close"/></svg></button>
+  </div>
+  {/if}
+  {/volist}
+</div>
+{include file="public/paging" /}
+{else/}
+{include file="public/empty" /}
+{/if}

@@ -1,0 +1,55 @@
+name: 问题反馈
+description: 页面显示异常、报错、功能不可用
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: 问题描述
+      description: 出了什么问题？期望的效果是什么？
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: 出错页面
+      description: 页面地址或路由，例如 /vodplay/1-1-1.html
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 打开 ……
+        2. 点击 ……
+  - type: input
+    id: maccms
+    attributes:
+      label: maccms 版本
+      placeholder: v2026.1000.4056
+    validations:
+      required: true
+  - type: input
+    id: php
+    attributes:
+      label: PHP 版本
+      placeholder: "7.4"
+  - type: input
+    id: browser
+    attributes:
+      label: 浏览器与设备
+      placeholder: Safari 18 / macOS，或 iPhone 15 微信内置浏览器
+    validations:
+      required: true
+  - type: dropdown
+    id: patched
+    attributes:
+      label: 是否打了 DPlayer 增强补丁
+      options:
+        - 是
+        - 否
+        - 与播放器无关
+  - type: textarea
+    id: logs
+    attributes:
+      label: 截图与日志
+      description: 页面截图、浏览器控制台报错、PHP 错误日志等

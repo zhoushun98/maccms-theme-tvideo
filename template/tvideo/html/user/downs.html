@@ -1,0 +1,10 @@
+{extend name="public/base" /}
+{block name="title"}下载记录 - {$maccms.site_name}{/block}
+{block name="head"}<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/user.css?v={$tv_v}"><meta name="robots" content="noindex,follow">{/block}
+{block name="body_class"}tv-page-uc{/block}
+{block name="main"}
+<header class="tv-page-hd"><h1>下载记录</h1></header>
+{include file="user/nav" /}
+{php}$tv_ulog_type = 5; $tv_ulog_card = 'h'; $tv_empty_text = '还没有下载记录';{/php}
+{include file="user/ulog_list" /}
+{/block}

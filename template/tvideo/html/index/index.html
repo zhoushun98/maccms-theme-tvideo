@@ -1,0 +1,107 @@
+{extend name="public/base" /}
+{block name="body_class"}tv-has-hero tv-page-home{/block}
+{block name="main"}
+{php}
+$tv_hero = model('Vod')->listCacheData(['level' => '9', 'num' => '8', 'order' => 'desc', 'by' => 'time']);
+if (empty($tv_hero['list'])) {
+    $tv_hero = model('Vod')->listCacheData(['num' => '6', 'order' => 'desc', 'by' => 'hits_week']);
+}
+$tv_hero = isset($tv_hero['list']) ? $tv_hero['list'] : [];
+{/php}
+{if condition="!empty($tv_hero)"}
+<section class="tv-hero" data-tv-banner aria-roledescription="carousel">
+  {volist name="tv_hero" id="bn" key="bk"}
+  <div class="tv-hero__slide{if condition="$bk eq 1"} is-active{/if}" aria-label="{$bn.vod_name}">
+    {if condition="$bn.vod_pic_slide neq ''"}
+    <img class="tv-hero__bg" src="{:mac_url_img($bn['vod_pic_slide'])}" alt="" decoding="async"{if condition="$bk eq 1"} fetchpriority="high"{else/} loading="lazy"{/if}>
+    {else/}
+    <img class="tv-hero__bg is-blur" src="{:mac_url_img($bn['vod_pic'])}" alt="" decoding="async"{if condition="$bk gt 1"} loading="lazy"{/if}>
+    <img class="tv-hero__poster" src="{:mac_url_img($bn['vod_pic'])}" alt="" decoding="async"{if condition="$bk gt 1"} loading="lazy"{/if}>
+    {/if}
+    <div class="tv-hero__mask"></div>
+    <a class="tv-hero__link" href="{:mac_url_vod_detail($bn)}" aria-label="{$bn.vod_name}"></a>
+    <div class="tv-hero__info">
+      <h2 class="tv-hero__title">{$bn.vod_name}</h2>
+      <div class="tv-hero__meta">
+        {if condition="$bn.vod_score gt 0"}<span class="tv-score">{$bn.vod_score}</span>{/if}
+        {if condition="$bn.vod_year neq ''"}<span>{$bn.vod_year}</span>{/if}
+        {if condition="$bn.vod_area neq ''"}<span>{$bn.vod_area}</span>{/if}
+        {if condition="$bn.vod_class neq ''"}<span>{:str_replace(',', ' / ', $bn['vod_class'])}</span>{/if}
+        {if condition="$bn.vod_remarks neq ''"}<span>{$bn.vod_remarks}</span>{/if}
+      </div>
+      {if condition="$bn.vod_blurb neq ''"}<p class="tv-hero__desc">{$bn.vod_blurb}</p>{/if}
+      <div class="tv-hero__acts">
+        <a class="tv-hero__play" href="{:mac_url_vod_play($bn, ['sid' => 1, 'nid' => 1])}"><svg class="tv-ico"><use href="#i-play"/></svg>立即播放</a>
+        <a class="tv-hero__more" href="{:mac_url_vod_detail($bn)}">查看详情</a>
+      </div>
+    </div>
+  </div>
+  {/volist}
+  <div class="tv-hero__thumbs">
+    {volist name="tv_hero" id="bn" key="bk"}
+    <button class="tv-hero__thumb{if condition="$bk eq 1"} is-active{/if}" type="button" data-go="{$bk}" aria-label="{$bn.vod_name}"><img src="{:mac_url_img($bn['vod_pic'])}" alt="" loading="lazy" decoding="async"><i></i></button>
+    {/volist}
+  </div>
+  <div class="tv-hero__dots">{volist name="tv_hero" id="bn" key="bk"}<i{if condition="$bk eq 1"} class="is-active"{/if}></i>{/volist}</div>
+</section>
+{/if}
+
+<section class="tv-sec" data-tv-continue hidden>
+  <header class="tv-sec__hd">
+    <h2 class="tv-sec__title">继续观看</h2>
+    <a class="tv-sec__more" href="{:mac_url('user/plays')}">全部记录<svg class="tv-ico"><use href="#i-right"/></svg></a>
+  </header>
+  <div class="tv-rail tv-rail--h" data-tv-rail><div class="tv-rail__track" data-tv-continue-list></div></div>
+</section>
+
+<section class="tv-sec">
+  <header class="tv-sec__hd">
+    <h2 class="tv-sec__title">本周热播</h2>
+    <a class="tv-sec__more" href="{:mac_url('label/rank')}">热度榜<svg class="tv-ico"><use href="#i-right"/></svg></a>
+  </header>
+  <div class="tv-rail tv-rail--v" data-tv-rail><div class="tv-rail__track">
+    {maccms:vod num="14" order="desc" by="hits_week" id="vo" key="hk"}
+    {include file="public/card_v" /}
+    {/maccms:vod}
+  </div></div>
+</section>
+
+{maccms:type ids="parent" mid="1" order="asc" by="sort" num="10" id="tp" key="tpk"}
+{php}$tv_is_h = false; // 采集源只有竖版海报，统一竖卡；有横版剧照时可改回按 type_en 切换（如综艺）{/php}
+<section class="tv-sec">
+  <header class="tv-sec__hd">
+    <h2 class="tv-sec__title">{$tp.type_name}</h2>
+    <nav class="tv-sec__tabs tv-scroll-x">
+      {maccms:type parent="'.$tp['type_id'].'" order="asc" by="sort" num="8" id="sub" key="subk"}
+      <a href="{:mac_url_type($sub)}">{$sub.type_name}</a>
+      {/maccms:type}
+    </nav>
+    <a class="tv-sec__more" href="{:mac_url_type($tp)}">查看更多<svg class="tv-ico"><use href="#i-right"/></svg></a>
+  </header>
+  <div class="tv-rail {if condition="$tv_is_h"}tv-rail--h{else/}tv-rail--v{/if}" data-tv-rail><div class="tv-rail__track">
+    {maccms:vod num="14" type="'.$tp['type_id'].'" order="desc" by="time" id="vo" key="vk"}
+    {if condition="$tv_is_h"}{include file="public/card_h" /}{else/}{include file="public/card_v" /}{/if}
+    {/maccms:vod}
+  </div></div>
+</section>
+{/maccms:type}
+
+<section class="tv-sec tv-home-rank">
+  <header class="tv-sec__hd">
+    <h2 class="tv-sec__title">热度榜<small>本周最受欢迎</small></h2>
+    <a class="tv-sec__more" href="{:mac_url('label/rank')}">完整榜单<svg class="tv-ico"><use href="#i-right"/></svg></a>
+  </header>
+  <div class="tv-rank-board">
+    {maccms:type ids="parent" mid="1" order="asc" by="sort" num="4" id="rt" key="rtk"}
+    <div class="tv-rank-col">
+      <div class="tv-rank-col__hd"><svg class="tv-ico"><use href="#i-rank"/></svg>{$rt.type_name}<small>周榜</small></div>
+      {php}$tv_rank_by = 'vod_hits_week';{/php}
+      {maccms:vod num="10" type="'.$rt['type_id'].'" order="desc" by="hits_week" id="vo" key="rk"}
+      {php}$tv_rank_n = $rk;{/php}
+      {include file="public/card_rank" /}
+      {/maccms:vod}
+    </div>
+    {/maccms:type}
+  </div>
+</section>
+{/block}

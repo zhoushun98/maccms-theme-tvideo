@@ -1,0 +1,25 @@
+{extend name="public/base" /}
+{block name="title"}搜索 - {$maccms.site_name}{/block}
+{block name="head"}<meta name="robots" content="noindex,follow">{/block}
+{block name="body_class"}tv-page-search{/block}
+{block name="main"}
+<header class="tv-page-hd"><h1>搜索</h1><p>输入片名、演员或导演</p></header>
+<form class="tv-hub-search" action="{:mac_url('vod/search')}" method="get" role="search">
+  <input class="tv-input" type="search" name="wd" placeholder="{$tv_hot.0|default='搜索影片、演员、导演'}" autocomplete="off" enterkeyhint="search" autofocus>
+  <button class="tv-btn tv-btn--primary" type="submit">搜索</button>
+</form>
+{if condition="!empty($tv_hot)"}
+<section class="tv-sec">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">热门搜索</h2></header>
+  <div class="tv-chips">{volist name="tv_hot" id="hw"}<a class="tv-chip" href="{:mac_url_search(['wd' => $hw])}">{$hw}</a>{/volist}</div>
+</section>
+{/if}
+<section class="tv-sec">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">热播推荐</h2></header>
+  <div class="tv-grid tv-grid--v">
+    {maccms:vod num="14" order="desc" by="hits_week" id="vo" key="rk"}
+    {include file="public/card_v" /}
+    {/maccms:vod}
+  </div>
+</section>
+{/block}

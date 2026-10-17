@@ -1,0 +1,53 @@
+{extend name="public/base" /}
+{block name="title"}个人中心 - {$maccms.site_name}{/block}
+{block name="head"}<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/user.css?v={$tv_v}"><meta name="robots" content="noindex,follow">{/block}
+{block name="body_class"}tv-page-uc{/block}
+{block name="main"}
+{if condition="$tv_login"}
+{php}
+$tv_gids = array_map('intval', explode(',', (string)$obj['group_id']));
+$tv_vip = max($tv_gids) >= 3;
+$tv_end = (int)$obj['user_end_time'];
+{/php}
+<section class="tv-uc-hero{if condition="$tv_vip"} is-vip{/if}">
+  <img class="tv-uc-hero__avatar" src="{:mac_get_user_portrait($obj['user_id'])}" alt="" width="80" height="80">
+  <div class="tv-uc-hero__info">
+    <h1 class="tv-uc-hero__name">{:mac_default($obj['user_nick_name'], $obj['user_name'])}{if condition="$tv_vip"}<span class="tv-vip-tag"><svg class="tv-ico"><use href="#i-crown"/></svg>{$obj.group.group_name}</span>{else/}<span class="tv-group-tag">{$obj.group.group_name|default='会员'}</span>{/if}</h1>
+    <p class="tv-uc-hero__meta">
+      <span>账号：{$obj.user_name}</span>
+      <span>积分：<b class="tv-num">{$obj.user_points|default=0}</b></span>
+      {if condition="$tv_vip && $tv_end gt 0"}<span>会员到期：{:date('Y-m-d', $tv_end)}</span>{/if}
+    </p>
+  </div>
+  <div class="tv-uc-hero__acts">
+    <a class="tv-btn" href="{:mac_url('user/info')}">编辑资料</a>
+    <button class="tv-btn" type="button" data-tv-logout>退出登录</button>
+  </div>
+</section>
+{include file="user/nav" /}
+<section class="tv-sec">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">最近观看</h2><a class="tv-sec__more" href="{:mac_url('user/plays')}">全部<svg class="tv-ico"><use href="#i-right"/></svg></a></header>
+  <div class="tv-rail tv-rail--h" data-tv-rail><div class="tv-rail__track" data-tv-ulog-list data-type="4" data-limit="12" data-card="h"></div></div>
+  <p class="tv-uc-empty" data-tv-ulog-empty hidden>还没有播放记录，去<a class="tv-link" href="{$maccms.path}">首页</a>挑一部吧</p>
+</section>
+<section class="tv-sec">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">我的收藏</h2><a class="tv-sec__more" href="{:mac_url('user/favs')}">全部<svg class="tv-ico"><use href="#i-right"/></svg></a></header>
+  <div class="tv-rail tv-rail--v" data-tv-rail><div class="tv-rail__track" data-tv-ulog-list data-type="2" data-limit="14" data-card="v"></div></div>
+  <p class="tv-uc-empty" data-tv-ulog-empty hidden>还没有收藏，在详情页点击“收藏”即可加入</p>
+</section>
+{else/}
+<section class="tv-uc-guest">
+  <svg class="tv-uc-guest__ico"><use href="#i-user"/></svg>
+  <h1>登录后享受更多服务</h1>
+  <p>同步播放记录与收藏，换设备也能接着看</p>
+  <div class="tv-notice__acts">
+    <a class="tv-btn tv-btn--primary" href="{:mac_url('user/login')}">立即登录</a>
+    <a class="tv-btn" href="{:mac_url('user/reg')}">注册账号</a>
+  </div>
+</section>
+<section class="tv-sec" data-tv-continue hidden>
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">本机观看记录</h2></header>
+  <div class="tv-rail tv-rail--h" data-tv-rail><div class="tv-rail__track" data-tv-continue-list></div></div>
+</section>
+{/if}
+{/block}

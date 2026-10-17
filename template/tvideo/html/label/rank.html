@@ -1,0 +1,36 @@
+{extend name="public/base" /}
+{block name="title"}热度排行榜 - {$maccms.site_name}{/block}
+{block name="description"}{$maccms.site_name}影视热度排行榜，按周、月和总播放量排行。{/block}
+{block name="body_class"}tv-page-rank{/block}
+{block name="main"}
+<header class="tv-page-hd"><h1>热度排行榜</h1><p>根据真实播放热度实时更新</p></header>
+<div data-tv-tabs>
+  <div class="tv-tabs" role="tablist">
+    <button class="tv-tabs__btn is-active" type="button" data-tab="all">全部</button>
+    {volist name="tv_nav_types" id="rt"}
+    <button class="tv-tabs__btn" type="button" data-tab="t{$rt.type_id}">{$rt.type_name}</button>
+    {/volist}
+  </div>
+  {php}
+  $tv_rank_groups = [['key' => 'all', 'type' => 'all', 'name' => '全站']];
+  foreach ($tv_nav_types as $tv_rt) {
+      $tv_rank_groups[] = ['key' => 't' . $tv_rt['type_id'], 'type' => (string)$tv_rt['type_id'], 'name' => $tv_rt['type_name']];
+  }
+  $tv_rank_cols = [['by' => 'hits_week', 'field' => 'vod_hits_week', 'name' => '周榜', 'sub' => '近 7 天'], ['by' => 'hits_month', 'field' => 'vod_hits_month', 'name' => '月榜', 'sub' => '近 30 天'], ['by' => 'hits', 'field' => 'vod_hits', 'name' => '总榜', 'sub' => '累计播放']];
+  {/php}
+  {foreach name="tv_rank_groups" item="rg" key="rgk"}
+  <div class="tv-rank-board" data-panel="{$rg.key}"{if condition="$rgk gt 0"} hidden{/if}>
+    {foreach name="tv_rank_cols" item="rc" key="rck"}
+    <div class="tv-rank-col">
+      <div class="tv-rank-col__hd"><svg class="tv-ico"><use href="#i-rank"/></svg>{$rg.name}{$rc.name}<small>{$rc.sub}</small></div>
+      {php}$tv_rank_by = $rc['field'];{/php}
+      {maccms:vod num="20" type="'.$rg['type'].'" order="desc" by="'.$rc['by'].'" id="vo" key="rk"}
+      {php}$tv_rank_n = $rk;{/php}
+      {include file="public/card_rank" /}
+      {/maccms:vod}
+    </div>
+    {/foreach}
+  </div>
+  {/foreach}
+</div>
+{/block}

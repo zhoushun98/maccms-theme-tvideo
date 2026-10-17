@@ -1,0 +1,8 @@
+<nav class="tv-tabbar" aria-label="底部导航">
+  <a class="tv-tabbar__item{if condition="$tv_aid eq 1"} is-active{/if}" href="{$maccms.path}"><svg class="tv-ico"><use href="#i-home"/></svg><span>首页</span></a>
+  {if condition="!empty($tv_nav_types)"}
+  <a class="tv-tabbar__item{if condition="in_array($tv_aid, [11, 12])"} is-active{/if}" href="{:mac_url_type($tv_nav_types[0],[],'show')}"><svg class="tv-ico"><use href="#i-grid"/></svg><span>片库</span></a>
+  {/if}
+  <a class="tv-tabbar__item{if condition="$tv_aid eq 7"} is-active{/if}" href="{:mac_url('label/rank')}"><svg class="tv-ico"><use href="#i-rank"/></svg><span>排行</span></a>
+  <a class="tv-tabbar__item{if condition="$tv_aid eq 6"} is-active{/if}" href="{:mac_url('user/index')}"><svg class="tv-ico"><use href="#i-user"/></svg><span>我的</span></a>
+</nav>

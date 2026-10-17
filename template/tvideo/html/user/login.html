@@ -1,0 +1,29 @@
+{extend name="public/base" /}
+{block name="title"}登录 - {$maccms.site_name}{/block}
+{block name="head"}<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/user.css?v={$tv_v}"><meta name="robots" content="noindex,follow">{/block}
+{block name="body_class"}tv-page-auth{/block}
+{block name="main"}
+<div class="tv-auth">
+  {include file="user/auth_side" /}
+  <div class="tv-auth__card">
+    <div class="tv-auth__tabs"><a class="is-active" href="{:mac_url('user/login')}">登录</a><a href="{:mac_url('user/reg')}">注册</a></div>
+    <form class="tv-form" action="{:mac_url('user/login')}" method="post" data-tv-ajax-form data-success="{:mac_url('user/index')}" data-use-ref>
+      <div class="tv-field"><input class="tv-input" type="text" name="user_name" placeholder="用户名" autocomplete="username" maxlength="30" required></div>
+      <div class="tv-field"><input class="tv-input" type="password" name="user_pwd" placeholder="密码" autocomplete="current-password" maxlength="32" required></div>
+      {if condition="$GLOBALS['config']['user']['login_verify'] eq 1"}
+      <div class="tv-field tv-field__row"><input class="tv-input" type="text" name="verify" placeholder="验证码" autocomplete="off" maxlength="6" required><img class="mac_verify_img" src="{:url('verify/index')}" alt="验证码" title="看不清？点击刷新"></div>
+      {/if}
+      <p class="tv-form__msg" data-tv-form-msg></p>
+      <button class="tv-btn tv-btn--primary tv-btn--block" type="submit">登录</button>
+      <div class="tv-form__links"><a href="{:mac_url('user/reg')}">还没有账号？立即注册</a><a href="{:mac_url('user/findpass')}">忘记密码</a></div>
+    </form>
+    {if condition="$GLOBALS['config']['connect']['qq']['status'] eq 1 || $GLOBALS['config']['connect']['weixin']['status'] eq 1"}
+    <div class="tv-auth__oauth">
+      <span>其他方式登录</span>
+      {if condition="$GLOBALS['config']['connect']['qq']['status'] eq 1"}<a class="tv-btn tv-btn--sm" href="{:mac_url('user/oauth', ['type' => 'qq'])}">QQ</a>{/if}
+      {if condition="$GLOBALS['config']['connect']['weixin']['status'] eq 1"}<a class="tv-btn tv-btn--sm" href="{:mac_url('user/oauth', ['type' => 'weixin'])}">微信</a>{/if}
+    </div>
+    {/if}
+  </div>
+</div>
+{/block}

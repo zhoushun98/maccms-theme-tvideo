@@ -1,0 +1,29 @@
+{extend name="public/base" /}
+{block name="title"}资料设置 - {$maccms.site_name}{/block}
+{block name="head"}<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/user.css?v={$tv_v}"><meta name="robots" content="noindex,follow">{/block}
+{block name="body_class"}tv-page-uc{/block}
+{block name="main"}
+<header class="tv-page-hd"><h1>资料设置</h1></header>
+{include file="user/nav" /}
+<div class="tv-uc-panel">
+  <form class="tv-form tv-form--wide" action="{:mac_url('user/info')}" method="post" data-tv-ajax-form data-reload>
+    <input type="hidden" name="__token__" value="{$csrf_token|default=''}">
+    <div class="tv-form__group">
+      <h3>基本资料</h3>
+      <label class="tv-field"><span class="tv-field__label">用户名</span><input class="tv-input" type="text" value="{$obj.user_name}" disabled></label>
+      <label class="tv-field"><span class="tv-field__label">昵称</span><input class="tv-input" type="text" name="user_nick_name" value="{$obj.user_nick_name}" maxlength="20" placeholder="设置一个昵称"></label>
+      <label class="tv-field"><span class="tv-field__label">QQ</span><input class="tv-input" type="text" name="user_qq" value="{$obj.user_qq}" maxlength="16" inputmode="numeric"></label>
+      <label class="tv-field"><span class="tv-field__label">密保问题</span><input class="tv-input" type="text" name="user_question" value="{$obj.user_question}" maxlength="30" placeholder="用于找回密码"></label>
+      <label class="tv-field"><span class="tv-field__label">密保答案</span><input class="tv-input" type="text" name="user_answer" value="{$obj.user_answer}" maxlength="30"></label>
+    </div>
+    <div class="tv-form__group">
+      <h3>修改密码<small>不修改密码请全部留空</small></h3>
+      <label class="tv-field"><span class="tv-field__label">当前密码</span><input class="tv-input" type="password" name="user_pwd" autocomplete="current-password"></label>
+      <label class="tv-field"><span class="tv-field__label">新密码</span><input class="tv-input" type="password" name="user_pwd1" autocomplete="new-password"></label>
+      <label class="tv-field"><span class="tv-field__label">确认新密码</span><input class="tv-input" type="password" name="user_pwd2" autocomplete="new-password"></label>
+    </div>
+    <p class="tv-form__msg" data-tv-form-msg></p>
+    <button class="tv-btn tv-btn--primary" type="submit">保存</button>
+  </form>
+</div>
+{/block}

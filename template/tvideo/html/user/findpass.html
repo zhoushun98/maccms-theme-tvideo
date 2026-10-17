@@ -1,0 +1,23 @@
+{extend name="public/base" /}
+{block name="title"}找回密码 - {$maccms.site_name}{/block}
+{block name="head"}<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/user.css?v={$tv_v}"><meta name="robots" content="noindex,follow">{/block}
+{block name="body_class"}tv-page-auth{/block}
+{block name="main"}
+<div class="tv-auth">
+  {include file="user/auth_side" /}
+  <div class="tv-auth__card">
+    <div class="tv-auth__tabs"><a class="is-active" href="{:mac_url('user/findpass')}">密保找回</a><a href="{:mac_url('user/findpass_msg')}?ac=email">邮箱找回</a><a href="{:mac_url('user/findpass_msg')}?ac=phone">手机找回</a></div>
+    <form class="tv-form" action="{:mac_url('user/findpass')}" method="post" data-tv-ajax-form data-success="{:mac_url('user/login')}">
+      <div class="tv-field"><input class="tv-input" type="text" name="user_name" placeholder="用户名" autocomplete="username" required></div>
+      <div class="tv-field"><input class="tv-input" type="text" name="user_question" placeholder="密保问题" required></div>
+      <div class="tv-field"><input class="tv-input" type="text" name="user_answer" placeholder="密保答案" required></div>
+      <div class="tv-field"><input class="tv-input" type="password" name="user_pwd" placeholder="新密码（至少 6 位）" autocomplete="new-password" required></div>
+      <div class="tv-field"><input class="tv-input" type="password" name="user_pwd2" placeholder="确认新密码" autocomplete="new-password" required></div>
+      <div class="tv-field tv-field__row"><input class="tv-input" type="text" name="verify" placeholder="验证码" autocomplete="off" maxlength="6" required><img class="mac_verify_img" src="{:url('verify/index')}" alt="验证码" title="看不清？点击刷新"></div>
+      <p class="tv-form__msg" data-tv-form-msg></p>
+      <button class="tv-btn tv-btn--primary tv-btn--block" type="submit">重置密码</button>
+      <div class="tv-form__links"><a href="{:mac_url('user/login')}">想起来了？去登录</a></div>
+    </form>
+  </div>
+</div>
+{/block}

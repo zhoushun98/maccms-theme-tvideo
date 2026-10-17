@@ -1,0 +1,45 @@
+{extend name="public/base" /}
+{block name="title"}{:mac_default($obj['type_title'], $obj['type_name'])} - 热门{$obj.type_name}在线观看 - {$maccms.site_name}{/block}
+{block name="keywords"}{:mac_default($obj['type_key'], $obj['type_name'])}{/block}
+{block name="description"}{:mac_default($obj['type_des'], $maccms['site_description'])}{/block}
+{block name="body_class"}tv-page-type{/block}
+{block name="main"}
+{php}
+$tv_root_info = !empty($obj['type_pid']) && !empty($obj['parent']) ? $obj['parent'] : $obj;
+$tv_is_h = false; // 采集源只有竖版海报，统一竖卡；有横版剧照时可改回按 type_en 切换（如综艺）
+{/php}
+<header class="tv-page-hd">
+  <h1>{$obj.type_name}</h1>
+  {if condition="!empty($obj['type_pid'])"}<p>{$tv_root_info.type_name} · {$obj.type_name}</p>{/if}
+</header>
+<div class="tv-chips">
+  <a class="tv-chip{if condition="empty($obj['type_pid'])"} is-active{/if}" href="{:mac_url_type($tv_root_info)}">全部{$tv_root_info.type_name}</a>
+  {maccms:type parent="'.$tv_root_info['type_id'].'" order="asc" by="sort" num="30" id="sub" key="subk"}
+  <a class="tv-chip{if condition="$sub.type_id eq $obj.type_id"} is-active{/if}" href="{:mac_url_type($sub)}">{$sub.type_name}</a>
+  {/maccms:type}
+  <a class="tv-chip" href="{:mac_url_type($obj, [], 'show')}"><svg class="tv-ico"><use href="#i-filter"/></svg>&nbsp;筛选</a>
+</div>
+
+<section class="tv-sec">
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">本周热播</h2></header>
+  <div class="tv-rail {if condition="$tv_is_h"}tv-rail--h{else/}tv-rail--v{/if}" data-tv-rail><div class="tv-rail__track">
+    {maccms:vod num="14" type="current" order="desc" by="hits_week" id="vo" key="hk"}
+    {if condition="$tv_is_h"}{include file="public/card_h" /}{else/}{include file="public/card_v" /}{/if}
+    {/maccms:vod}
+  </div></div>
+</section>
+
+<section class="tv-sec">
+  <header class="tv-sec__hd">
+    <h2 class="tv-sec__title">最新更新</h2>
+    <a class="tv-sec__more" href="{:mac_url_type($obj, [], 'show')}">按条件筛选<svg class="tv-ico"><use href="#i-right"/></svg></a>
+  </header>
+  <div class="tv-grid {if condition="$tv_is_h"}tv-grid--h{else/}tv-grid--v{/if}">
+    {maccms:vod num="30" paging="yes" type="current" order="desc" by="time" id="vo" key="lk"}
+    {if condition="$tv_is_h"}{include file="public/card_h" /}{else/}{include file="public/card_v" /}{/if}
+    {/maccms:vod}
+  </div>
+  {if condition="empty($__PAGING__['record_total'])"}{include file="public/empty" /}{/if}
+  {include file="public/paging" /}
+</section>
+{/block}

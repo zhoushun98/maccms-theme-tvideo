@@ -1,0 +1,7 @@
+<nav class="tv-chan" aria-label="频道">
+  <a class="tv-chan__item{if condition="$tv_aid eq 1"} is-active{/if}" href="{$maccms.path}">首页</a>
+  {volist name="tv_nav_types" id="cht"}
+  <a class="tv-chan__item{if condition="$tv_root eq $cht.type_id"} is-active{/if}" href="{:mac_url_type($cht)}">{$cht.type_name}</a>
+  {/volist}
+  <a class="tv-chan__item{if condition="$tv_aid eq 7"} is-active{/if}" href="{:mac_url('label/rank')}">排行</a>
+</nav>

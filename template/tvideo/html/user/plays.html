@@ -1,0 +1,21 @@
+{extend name="public/base" /}
+{block name="title"}播放记录 - {$maccms.site_name}{/block}
+{block name="head"}<link rel="stylesheet" href="{$maccms.path_tpl}asset/css/user.css?v={$tv_v}"><meta name="robots" content="noindex,follow">{/block}
+{block name="body_class"}tv-page-uc{/block}
+{block name="main"}
+<header class="tv-page-hd"><h1>播放记录</h1></header>
+{include file="user/nav" /}
+{php}$tv_ulog_type = 4; $tv_ulog_card = 'h'; $tv_empty_text = '还没有播放记录';{/php}
+{if condition="$tv_login"}
+{include file="user/ulog_list" /}
+{else/}
+<section class="tv-uc-guest tv-uc-guest--sm">
+  <h1>登录后可查看云端播放记录</h1>
+  <div class="tv-notice__acts"><a class="tv-btn tv-btn--primary" href="{:mac_url('user/login')}">立即登录</a></div>
+</section>
+<section class="tv-sec" data-tv-continue hidden>
+  <header class="tv-sec__hd"><h2 class="tv-sec__title">本机观看记录</h2></header>
+  <div class="tv-rail tv-rail--h" data-tv-rail><div class="tv-rail__track" data-tv-continue-list></div></div>
+</section>
+{/if}
+{/block}

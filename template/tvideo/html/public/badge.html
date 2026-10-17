@@ -1,0 +1,2 @@
+{php}$tv_tag = isset($vo['vod_tag']) ? (string)$vo['vod_tag'] : '';{/php}
+{if condition="stripos($tv_tag, 'VIP') !== false"}<i class="tv-badge tv-badge--vip">VIP</i>{elseif condition="strpos($tv_tag, '独播') !== false"/}<i class="tv-badge">独播</i>{elseif condition="strpos($tv_tag, '自制') !== false"/}<i class="tv-badge">自制</i>{elseif condition="strpos($tv_tag, '首播') !== false"/}<i class="tv-badge">首播</i>{/if}

@@ -1,0 +1,15 @@
+{extend name="public/base" /}
+{block name="title"}{$obj.vod_name} - 需要访问密码 - {$maccms.site_name}{/block}
+{block name="head"}<meta name="robots" content="noindex,follow">{/block}
+{block name="main"}
+<section class="tv-notice">
+  <svg class="tv-notice__ico"><use href="#i-lock"/></svg>
+  <h1 class="tv-notice__title">{$obj.vod_name}</h1>
+  <p class="tv-notice__desc">访问该影片详情需要输入密码</p>
+  <form class="tv-notice__form" action="javascript:;" onsubmit="return false">
+    <input class="tv-input" type="password" name="pwd" placeholder="请输入访问密码" autocomplete="off">
+    <button class="tv-btn tv-btn--primary" type="button" onclick="MAC.Pwd.Check(this)" data-mid="1" data-id="{$obj.vod_id}" data-type="1">确认</button>
+  </form>
+  {if condition="$obj.vod_pwd_url neq ''"}<p class="tv-notice__desc"><a class="tv-link" href="{$obj.vod_pwd_url}" target="_blank" rel="noopener">点击获取密码</a></p>{/if}
+</section>
+{/block}

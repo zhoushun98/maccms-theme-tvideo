@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+{include file="public/head" /}
+<title>{block name="title"}{$maccms.site_name}{/block}</title>
+<meta name="keywords" content="{block name="keywords"}{$maccms.site_keywords}{/block}">
+<meta name="description" content="{block name="description"}{$maccms.site_description}{/block}">
+{block name="head"}{/block}
+</head>
+<body class="tv {block name="body_class"}{/block}">
+<span class="mac_user" hidden></span>
+{include file="public/icons" /}
+{include file="public/sidebar" /}
+<div class="tv-app">
+{include file="public/topbar" /}
+{block name="channel"}{include file="public/channel" /}{/block}
+<main class="tv-main">
+{block name="main"}{/block}
+</main>
+{include file="public/foot" /}
+</div>
+{include file="public/tabbar" /}
+{block name="scripts"}{/block}
+</body>
+</html>
